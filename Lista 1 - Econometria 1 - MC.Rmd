@@ -1,7 +1,7 @@
 ---
-title: "Lista 1 "
+title: "Lista 1"
 author: "Maria Vitória Cruz"
-date: "17 de março de 2021"
+date: "17 de março de 2022"
 documentclass: article
 papersize: a4
 fontsize: 12pt
