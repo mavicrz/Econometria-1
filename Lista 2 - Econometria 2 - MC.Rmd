@@ -1,0 +1,365 @@
+---
+title: "Lista 2"
+author: "Maria Vitória Cruz"
+date: "31 de março de 2022"
+documentclass: article
+papersize: a4
+fontsize: 12pt
+linestretch: 1.5
+geometry: "left = 1.0in, right = 1.0in, top = 1.0in, bottom = 1.0in"
+indent: true
+output:
+  bookdown::pdf_document2:
+    toc: false
+    latex_engine: pdflatex
+    number_sections: true
+    extra_dependencies:
+      fontenc: ["T1"]
+      inputenc: ["utf8"]
+      babel: ["english, latin, brazil"]
+      lipsum: null
+      float: null
+      booktabs: null
+      threeparttable: null
+      array: null
+      graphicx: null
+      tabularx: null
+      adjustbox: null
+      amsmath: null
+      amssymb: null
+      amsthm: null
+header-includes:
+  - \usepackage{floatrow}
+  - \floatsetup[figure]{capposition=top}
+  - \floatsetup[table]{style=plaintop}
+  - \usepackage{hyperref}
+  - \hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue, filecolor=blue}
+---
+
+```{r setup, include=FALSE}
+xfun::pkg_attach(c('dplyr','tidyr','purrr','wooldridge','stargazer'), install = T)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Questão 1
+O experimento gera uma variável aleatória que é o número de pontos obtidos no teste com variação do tempo de duração da prova, sendo $0 \leq Y_{i} \leq 100$, enquanto tem-se que $X_{i} = \{90 \lor 120\}$,  considerando o modelo de regressão linear simples, tem-se $Y_{i}= \alpha + \beta X{i}+ u_{i}$.
+
+## Questão 1A
+O termo $u_{i}$ são os fatores não observados, ou seja, aquilo que é aleatoriamente distribuído entre as pessoas e não observado na relação entre tempo de prova e nota, como habilidades cognitivas e capacidades socioemocionais. Alunos diferentes possuem valores diferentes de $u_{i}$ porque estes são distribuídos aleatoriamente, cada pessoa possui um contexto externo ao tempo de prova, estes são fatores que não podemos inferir sobre a população, porque não observamos. É importante que sejam diferentes, e não relacionados com o tempo, assim podemos excluir seu impacto.
+
+## Questão 1B
+Deseja-se que esperança condicional dos erros para a variável de controle seja nula para que exista indepêndencia entre as variáveis, assim é possível afirmar que existe uma relação de causalidade entre a variável de controle e a variável explicada. A demonstração segue como:
+
+$$u_{i}= Y_{i} - \alpha - \beta X_{i}$$
+$$\mathbf{E}(u_{i}|X_{i})= \mathbf{E}(Y_{i} - \alpha - \beta X_{i}| X_{i})$$
+
+$$\mathbf{E}(u_{i}|X_{i})= \mathbf{E}(Y_{i}|X_{i}) - \mathbf{E}(\alpha|X_{i}) - \beta\mathbf{E}(X_{i}|X_{i})$$
+$$\mathbf{E}(u_{i}|X_{i})= \mathbf{E}(Y_{i}) - \alpha - \beta\mathbf{E}(X_{i})$$
+$$\mathbf{E}(u_{i}|X_{i})= \mathbf{E}(\alpha + \beta X{i}+ u_{i}) - \alpha - \beta\mathbf{E}(X_{i})$$
+$$\mathbf{E}(u_{i}|X_{i})= \alpha + \beta \mathbf{E}(X{i})+ \mathbf{E}(u_{i}) - \alpha - \beta\mathbf{E}(X_{i}) \implies \mathbf{E}(u_{i}|X_{i}) = \mathbf{E}(u_{i}) $$
+
+Assim, provamos que o modelo possui a condição de que os erros e a variável $X_{i}$ são independentes.
+
+## Questão 1C
+### (i)
+Se temos que $\hat{Y_{i}}=  49 + 0.24 X_{i}$, logo para $X_{i} \in \{90,120\}$
+
+```{r}
+x_i <- c(90, 120)
+
+purrr::map(x_i, function(x_i,y_i){
+  y_i <- 49 + 0.24*x_i
+})
+
+
+```
+
+Então, para $X_{1}=90 \implies \hat{Y_{1}} = 70.6$ e $X_{2}=120 \implies \hat{Y_{2}} = 77.8$.
+
+### (ii)
+
+Uma variação no tempo é dada por $\Delta X_{i}$, logo um impacto na nota é dado por $\Delta \hat{Y_{1}} = 0.24*\Delta X_{i}$, logo se $\Delta X_{i} = 10 \implies \hat{Y_{1}} = 2,4$, um aumento de 10 minutos de prova gera um aumento de 2,4 na nota da prova.
+
+# Questão 2
+$$f_{X}(x,\theta) = \theta x^{(\theta -1)} I_{(0,\infty)} (x), \;\; \theta >0$$
+
+## Questão 2A
+Sabemos que para uma distribuição Beta, temos a seguinte função:
+$$f(x| \alpha, \beta) = \left\{\begin{matrix}
+\frac{\Gamma (\alpha + \beta)}{\Gamma (\alpha) \Gamma (\beta)} x^{\alpha -1} (1-x)^{\beta -1}, 0< x <1\\ 
+0, c.c.
+\end{matrix}\right.$$
+
+Para $\beta =1$ e $\alpha = \theta$, temos que
+
+$$f(x| \theta, 1) = \left\{\begin{matrix}
+\frac{\Gamma (\theta+ 1)}{\Gamma (\theta) \Gamma (1)} x^{\theta -1} (1-x)^{1 -1}, 0< x <1\\ 
+0, c.c.
+\end{matrix}\right.$$
+
+$$f(x| \theta, 1) = \left\{\begin{matrix}
+\frac{\theta\Gamma (\theta)}{\Gamma (\theta)} x^{\theta -1} , 0< x <1\\ 
+0, c.c.
+\end{matrix}\right.$$
+
+$$f(x| \theta, 1) = \left\{\begin{matrix}
+\theta x^{\theta -1} , 0< x <1\\ 
+0, c.c.
+\end{matrix}\right.$$
+
+Portanto, com $X \sim \beta(\theta,1)$ sabemos que esperança é dada por $E(x)= \frac{\theta}{\theta+1}$, se temos que $\mu = E(x)$, temos:
+
+$$\frac{\sum_{i=1}^{n}}{n} = \frac{\theta}{\theta+1} \implies \theta = \frac{\sum_{i=1}^{n}}{n - \sum_{i=1}^{n}}$$
+$$\theta = \frac{1}{\frac{n}{\sum_{i=1}^{n}} - 1} \implies  \hat{\theta}_{mom} = \frac{\bar{X}}{1 - \bar{X}}$$
+
+## Questão 2B
+Para uma distribuição exponencial, tem-se que para $X = \{x_{1},..., x_{n}\}$:
+
+$$g(x_{1},...,x_{n}) = \prod_{i=1}^{n} f(x_{i})  = (\prod_{i=1}^{n} x_{i}) exp(- \sum_{i=1}^{n} x_{i})$$
+Assim, tem-se:
+
+$$g(\theta) = \prod_{i=1}^{n} \theta x^{(\theta -1)} = \theta^{n} \prod^{n}_{i=1}x_{i}^{\alpha-1}$$
+
+$$L(\theta)= log(g(\theta)) =  log(\theta^{n} \prod^{n}_{i=1}x_{i}^{\alpha-1})$$
+$$L(\theta)= log(\theta^{n}) + (\theta -1) log (\prod^{n}_{i=1}x_{i}^{\alpha-1}) \implies L(\theta)= nlog(\theta) + (\theta -1) \sum^{n}_{i=1}log (x_{i})$$
+
+$$\frac{dL(\theta)}{d\theta}= \frac{n}{\theta} + \sum^{n}_{i=1}log (x_{i}) $$
+$$\frac{n}{\theta} =  -\sum^{n}_{i=1}log (x_{i}) \implies \theta = \frac{-n}{\sum^{n}_{i=1}log (x_{i})}$$
+$$\hat{\theta}_{MVS} = \frac{-1}{\bar{X}_{log}}$$
+$$\frac{d^{2}h(\theta)}{d\theta^{2}}= \frac{-n}{\theta^{2}}  \implies \frac{d^{2}h(\theta)}{d\theta^{2}} <0$$
+Portanto é ponto de máximo e o estimador é válido.
+
+# Questão 3
+Considerando uma função de distribuição de probabilidade de $Y|X$ como  uma Poisson, tem-se:
+
+$$f_{Y|X} = \frac{e^{-\lambda}\lambda^{y}}{y!} = \frac{f_{x,y}}{f_{x}}$$
+Sendo $Y|X \sim Poisson(\beta_{0} + \beta_{1}x)$ temos uma a.a. $\{(x_{i},y_{i}) \forall i = 1,...,n\}$ tem-se $y_{i}|x_{i} \sim Poisson(\beta_{0}, \beta_{1}x_{i})$
+
+$$f(y_{i}|x_{i}, \beta_{0}, \beta_{1}) = \frac{e^{-\beta_{0} - \beta_{1}x_{i}}(\beta_{0} + \beta_{1}x_{i})^{y_{i}}}{y_{i}!}$$
+Entretanto, podemos calcular o estimador por MVS e depois substituir o $\lambda$.
+
+$$g(\lambda)= \prod^{n}_{i=1} \frac{e^{-\lambda}\lambda^{y}}{y!}$$
+
+$$L(\lambda)= log(g)= \sum^{n}_{i=1} log (\frac{e^{-\lambda}\lambda^{y}}{y!})$$
+$$L(\lambda)= \sum^{n}_{i=1} (-\lambda - log (y_{i}!)  + y_{i} log(\lambda))$$
+
+$$L(\lambda)= -n\beta_{0} -\beta_{1}\sum^{n}_{i=1} x_{i} - \sum^{n}_{i=1} log (y_{i}!)  + \sum^{n}_{i=1}y_{i}log(\beta_{0} + \beta_{1}x_{i})$$
+
+$$\frac{dL(\lambda)}{d\beta_{0}} = -n + \frac{1}{\beta_{0} + \beta_{1}x_{i}}\sum^{n}_{i=1}y_{i}$$
+$$n = \frac{1}{\beta_{0} + \beta_{1}x_{i}}\sum^{n}_{i=1}y_{i} \implies  \beta_{0} + \beta_{1}x_{i}=\frac{1}{n}\sum^{n}_{i=1}y_{i} \implies \hat{\beta_{0}} = \bar{y} - \hat{\beta_{1}}x_{i} $$
+$$\frac{dL(\lambda)}{d\beta_{1}} = -\sum^{n}_{i=1} x_{i} + \frac{x_{i}}{\beta_{0} + \beta_{1}x_{i}}\sum^{n}_{i=1}y_{i}$$
+
+$$n\bar{x} = \frac{x_{i}}{\beta_{0} + \beta_{1}x_{i}}\sum^{n}_{i=1}y_{i} \implies  \bar{x}(\beta_{0} + \beta_{1}x_{i}) = \bar{y} x_{i}$$
+
+$$\bar{x}(\beta_{0} + \beta_{1}x_{i}) = \bar{y} x_{i} \implies  \bar{x}\beta_{0} + \bar{x}(\beta_{1}x_{i}) = \bar{y} x_{i}$$
+$$\hat{\beta_{1}} = \frac{\bar{y} x_{i} - \bar{x}\beta_{0}}{\bar{x}x_{i}} $$
+
+# Questão 4
+
+Com uma regressão linear simples $y_{i}= \alpha + \beta x_{i} + u_{i}$, tem-se:
+
+## Questão 4A
+Para derivar o estimados de OLS deve-se minimizar a soma dos quadrados dos resíduos.
+
+$$\arg \min \sum_{i=1}^{n} \hat{u_{i}}^{2} \;\; | \;\; \hat{u_{i}} = y_{i} - \alpha - \beta x_{i}$$
+
+$$\arg \min \sum_{i=1}^{n} (y_{i} - \hat{\alpha} - \hat{\beta} x_{i})^{2}$$
+$$\frac{\partial \; OLS}{\partial \; \hat{\beta}} = -2 \sum_{i=1}^{n} (y_{i} - \hat{\alpha} - \hat{\beta} x_{i}) = 0$$
+$$\frac{\partial \; OLS}{\partial \; \hat{\beta}} = -2x_{i} \sum_{i=1}^{n} (y_{i} - \hat{\alpha} - \hat{\beta} x_{i}) = 0$$
+$$ \sum_{i=1}^{n} (y_{i} - \hat{\alpha} - \hat{\beta} x_{i})(-x_{i}) = 0$$
+$$\sum_{i=1}^{n} [(y_{i} - \bar{y}) +  (\hat{\beta}x_{i} - \hat{\beta} x_{i})](-x_{i}) = 0$$
+$$\sum_{i=1}^{n} x_{i}(y_{i} - \bar{y}) -\hat{\beta}  \sum_{i=1}^{n} (x_{i} - \bar{x}) = 0$$
+$$\hat{\beta} = \frac{\sum_{i=1}^{n} (x_{i} - \bar{x})(y_{i} - \bar{y})}{\sum_{i=1}^{n} (x_{i} - \bar{x})^{2}}$$
+
+Assim, tem-se que para $\alpha$
+
+$$\hat{\alpha} = \bar{y} - \hat{\beta} \bar{x}$$
+
+## Questão 4B
+Temos que $\bar{\hat{y}}=\bar{y}$, para $\hat{y} = \hat{\alpha} + \hat{\beta}x$, assim:
+
+$$\bar{\hat{y}} = \frac{\sum_{i=1}^{n} (\hat{\alpha} + \hat{\beta} x_{i})}{n} \implies \bar{\hat{y}} = \hat{\alpha} + \hat{\beta} \frac{\sum_{i=1}^{n} x_{i}}{n} \implies \bar{\hat{y}}=  \hat{\alpha} + \hat{\beta} \bar{x} = \bar{y}$$
+
+## Questão 4C
+Deve-se demonstrar que $\sum \hat{y_{i}}\hat{u_{i}}=0$
+$$\sum \hat{y_{i}}\hat{u_{i}} = \sum (\hat{\alpha} + \hat{\beta}x_{i})\hat{u_{i}} \implies \sum \hat{y_{i}}\hat{u_{i}}= \hat{\alpha}\sum\hat{u_{i}} +  \hat{\beta} \sum\hat{u_{i}}x_{i} $$
+Como $\sum\hat{u_{i}} = 0$ e $\sum\hat{u_{i}} =  \sum\hat{u_{i}}x_{i}$
+
+$$\sum\hat{u_{i}} =  cov(x_{i}, \hat{u_{i}}) \implies \sum\hat{u_{i}} = \sum(x_{i} - \bar{x})\hat{u_{i}}$$
+$$\sum\hat{u_{i}} = \sum(x_{i}\hat{u_{i}}) - n\bar{x}\sum\hat{u_{i}} \implies \sum\hat{u_{i}} = \sum(x_{i}\hat{u_{i}}) = 0$$
+$$\sum \hat{y_{i}}\hat{u_{i}} = \hat{\alpha}0 +  \hat{\beta} 0 \implies \sum \hat{y_{i}}\hat{u_{i}} = 0$$
+## Questão 4D
+Devemos demonstrar que $R^{2}$ pode ser escrito como $corr(x,y)^{2}$, para isso sabemos que $\hat{\beta}= \frac{cov(x,y)}{(\sigma_{x})^{2}} = \hat{\rho}(x,y)\frac{\hat{\sigma_{y}}}{\hat{\sigma_{x}}}$
+
+$$R^{2}= \frac{\sum^{n}_{i=1}(\hat{y_{i}} - \bar{y})^{2}}{\sum^{n}_{i=1}(y_{i} - \bar{y})^{2}} \implies R^{2} =  \frac{1}{\sigma_{y}^{2}}\sum^{n}_{i=1}(\hat{y_{i}} - \bar{y})^{2}$$
+$$R^{2} = \frac{1}{\sigma_{y}^{2}}\sum^{n}_{i=1}(\hat{\alpha} +\hat{\beta}x_{i} - \hat{\alpha} -\hat{\beta}\bar{x})^{2} \implies R^{2} = \frac{1}{\sigma_{y}^{2}} \hat{\beta}^{2}\sum^{n}_{i=1} (x_{i} - \bar{x})^{2}$$
+$$R^{2} = \frac{\sigma_{x}^{2}}{\sigma_{y}^{2}} \hat{\beta}^{2} \implies R^{2} = \frac{\sigma_{x}^{2}}{\sigma_{y}^{2}}\rho(x,y)^{2}\frac{\sigma_{y}^{2}}{\sigma_{x}^{2}}$$
+$$R^{2} = \rho(x,y)^{2}$$
+## Questão 4E
+Se $\hat{beta}=0 <=> R^{2} = 0$, como definimos anteriormente, $R^{2} = \rho(x,y)^{2}$ e $\hat{\beta}= \hat{\rho}(x,y)\frac{\hat{\sigma_{y}}}{\hat{\sigma_{x}}}$ se $\hat{beta}=0 \implies \hat{\rho}(x,y) = 0$ logo, $\rho(x,y)^{2} =0 \implies R^{2} = 0$
+
+# Questão 5
+Exercício da primeira versão da lista:
+Seja o modelo $y_{i}= \beta + u_{i}$, deve-se encontrar o estimador OLS. Assim temos que minimizar a soma de quadrados do erro.
+
+$$\arg \min \sum_{i=1}^{n} \hat{u_{i}}^{2}$$
+$$\hat{u_{i}} = y_{i} - \hat{\beta_{0}} \implies \sum_{i=1}^{n} \hat{u_{i}}^{2} =\sum_{i=1}^{n} (y_{i} - \hat{\beta_{0}})^{2}$$
+$$\frac{d MQO}{d \hat{\beta_{0}}} = -2 \sum_{i=1}^{n}(y_{i} - \hat{\beta_{0}}) =0$$
+$$- \sum_{i=1}^{n}y_{i} + \sum_{i=1}^{n}\hat{\beta_{0}} =0$$
+$$- \sum_{i=1}^{n}y_{i} + n\hat{\beta_{0}} =0 \implies \hat{\beta_{0}} = \frac{\sum_{i=1}^{n}y_{i}}{n}$$
+
+Como não há $\beta_{1}$, devemos derificar somente se $\hat{\beta_{0}}$ é ponto de mínimo com condição de segunda ordem.
+
+
+$$\frac{d^{2} MQO}{d \hat{\beta_{0}}^{2}} = -2 * -1 = 2 > 0$$
+Assim, o estimador minimiza a soma dos quadrados dos resíduos.
+
+Exercício da segunda versão da lista:
+Seja o modelo $y_{i}= \beta_{1} x_{i} + u_{i}$, deve-se encontrar o estimador OLS.
+
+$$\hat{u_{i}} = y_{i} - \hat{\beta_{1}} x_{i} \implies \sum_{i=1}^{n} \hat{u_{i}}^{2} =\sum_{i=1}^{n} (y_{i} - \hat{\beta_{1}} x_{i})^{2}$$
+$$\frac{d MQO}{d \hat{\beta_{1}}} = -2 \sum_{i=1}^{n}(y_{i} - \hat{\beta_{1}x_{i}})x_{i} =0$$
+
+$$\sum_{i=1}^{n}y_{i}x_{i} - \hat{\beta_{1}}\sum_{i=1}^{n}x_{i}^{2} =0 \implies \beta_{1} = \frac{\sum_{i=1}^{n}y_{i}x_{i}}{\sum_{i=1}^{n}x_{i}^{2}}$$
+
+
+
+
+# Questão 6
+Considerando o modelo de regressão linear simples $y = \beta_{0} + \beta_{1}x + u$, para uma amostra com 32 observações, tem-se:
+
+(i) $\bar{y}=30$
+(ii) $\bar{x}=10$
+(iii) $\sum^{32}_{i=1}(y_{i} - \bar{y})^{2}=90$
+(iv) $\sum^{32}_{i=1}(x_{i} - \bar{x})^{2}=60$
+(v) $\sum^{32}_{i=1}(y_{i} - \bar{y})(x_{i} - \bar{x}) =30$
+
+A Soma dos Quadrados dos Resíduos correspondente aos estimadores de MQO para o modelo é determinada pela equação $SQT = SQR + SQE$, ou seja, a Soma dos Quadrados Totais é igual a Soma dos Quadrados dos Resíduos mais a Soma dos Quadrados Explicados.
+
+Temos que $SQT = \sum^{n}_{i=1}(y_{i} - \bar{y})^{2}$, portanto $SQT =\sum^{32}_{i=1}(y_{i} - \bar{y})^{2}=90$ temos que $SQR = 90 - SQE$.
+
+Com $SQE = \sum^{n}_{i=1}(\hat{y_{i}} -  \bar{y})^{2}$, sabemos que $\hat{\beta_{1}} = \frac{\sum_{i=1}^{n} (x_{i} - \bar{x})(y_{i} - \bar{y})}{\sum_{i=1}^{n} (x_{i} - \bar{x})^{2}}$, assim $\hat{\beta_{1}} = \frac{30}{60} \implies \hat{\beta_{1}} = \frac{1}{2}$.
+
+Tem-se que $\bar{\hat{y}} = \hat{\beta_{0}} + \hat{\beta_{1}} \bar{x}$ como $\bar{\hat{y}} = \bar{y}$, vale que $30 = \hat{\beta_{0}} + \frac{1}{2} 10$ portanto $\hat{\beta_{0}}=25$.
+
+Como sabemos que $\hat{y} = 25 + 0.5 x$, temos que
+
+$$SQE = \sum^{32}_{i=1}(25 + 0,5 x_{i} -  30)^{2} \implies SQE = \sum^{32}_{i=1}(0,25 x_{i}^{2} -  5 x_{i} + 25)$$
+$$ SQE = 0,25\sum^{32}_{i=1}x_{i}^{2} -  5 \sum^{32}_{i=1}x_{i} + \sum^{32}_{i=1}25$$
+Como temos que $\sum^{32}_{i=1}x_{i} = 32 * \bar{x} = 320$, também sabemos que $var(x) = \frac{SQTx}{n-1} = \frac{60}{31}$ e que $var(x) = E(x^{2}) - E(x)^{2}$, assim, temos:
+
+$$  E(x^{2}) - E(x)^{2}=\frac{60}{31} \implies \frac{\sum^{32}_{i=1}x_{i}^{2}}{32} - 100 = \frac{60}{31}$$
+$$\sum^{32}_{i=1}x_{i}^{2} = 3260 * \frac{32}{31} \implies \sum^{32}_{i=1}x_{i}^{2} \approx 3260$$
+
+$$SQE = 0,25*3260-  5 *320 + 32*25 \implies SQE= 15$$
+$$SQT = SQR + SQE \implies 90 = SQR + 15 \implies SQR = 75$$
+
+# Questão 7
+## Questão 7A
+A estatística $R^{2}$ é definida pela razão da Soma dos Quadrados Explicada (SQE) pela Soma dos Quadrados Total (SQT), ou seja, é a razão entre a variação explicada e a variação total:
+
+$$R^{2} = \frac{SQE}{SQT} = \frac{\sum^{n}_{i=1}(\hat{y_{i}} - \bar{y})^{2}}{\sum^{n}_{i=1}(y_{i} - \bar{y})^{2}}$$
+É a fração da variação amostral em y que é explicada por x. Em geral, a interpretação é que valores muito próximos a zero de $R^{2}$ representam que o modelo não se ajusta suficientemente aos dados.
+
+## Questão 7B
+A sua inportância está em qualificar um ajuste do modelo aos dados, isto é, quanto x explica y nesse modelo estimado, por exemplo, se todos os pontos do modelo estimado condizem com a reta real, $R^{2}$ seria igual a 1. Entretanto, um R-quadrado baixo para estimações de efeito causal não são necessariamente ruins, afinal, para causalidade é essencial observar o efeito de uma única variável, assim a hipótese  $\mathbf{E}(u_{i}|X_{i}) =0$ é mais importante. 
+
+Para prever valores, $R^{2}$ é mais importante e explica fortemente a qualidade da estimação, o conjunto de fatores que prevê y está relacionado a quanto o modelo se aplica aos dados.
+
+# Questão 8
+## Questão 8A
+Se temos o modelo dado por $enem = \alpha + \beta horas + u$, podemos assumir que $\mathbf{E}[u]=0$ e sabemos pela demosntração em 1b que $\mathbf{E}[u] = \mathbf{E}[u|X] = 0$, o que significa que os erros são independentes da variável explicativa, assim, o impacto dela não está sendo influenciado pelos fatores não observados.
+
+Exemplos de fatores inclusos no erro, ou melhor, fatores não observados são habilidades cognitivas do indivíduo que permitem uma facilidade maior com vestibular e podem influenciar numa eficiência de tempo diferente e preferências por determinadas matérias, afinal, isso aumentaria as horas de estudo e influenciaria na nota. No primeiro caso, considerando que o indivíduo precisa de menos horas de estudo, teria uma correlação negativa com a variável explicativa, enquanto as preferências teriam uma correlação positiva, se essas correlações valessem teriamos o problema de viés por variável não observada.
+
+Entretanto a correlação deles deve ser igual a zero, se temos que $\mathbf{E}[u] = \mathbf{E}[u|X] = 0 \implies Cov(X,Y)=0 \implies \rho(X,Y)=0$, assim, os fatores não observados não interferem na causalidade de horas para notas no vestibular.
+
+## Questão 8B
+O coeficiente de $\beta$ seria positivo, afinal, controlando por outros fatores, quanto maior a dedicação em horas do aluno, há um aumento na nota de vestibular.
+
+## Questão 8C
+O intercepto para o parâmetro $\alpha$ indica o quanto nenhuma hora dedicada gera na nota, no caso geral, o que a ausência da variável explicativa gera na variável de interesse.
+
+# Questão 9
+## Questão 9A
+```{r}
+analise_educ <- wooldridge::wage1 %>%
+  dplyr::select(educ) %>% 
+  as.data.frame() %>% 
+  stargazer(type = "text", title = "Análise da variável de educação",
+            summary.stat = c("mean", "max","min"))
+
+educ_max <- wooldridge::wage1 %>%
+  dplyr::filter(educ==18) %>% 
+  nrow()
+
+educ_min <- wooldridge::wage1 %>% 
+  dplyr::filter(educ==0) %>% 
+  nrow()
+
+print(educ_max)
+print(educ_min)
+  
+```
+Ou seja, a média de anos de educação é de 12.563, a quantidade mínima de anos em educação é de 0 anos e máxima de educação é de 18 anos. Na base, 19 pessoas possuem o máximo de educação da população amostral e 2 possuem o mínimo da população amostral.
+
+## Questão 9B
+```{r}
+analise_wage <- wooldridge::wage1 %>%
+  dplyr::select(wage) %>% 
+  as.data.frame() %>% 
+  stargazer(type = "text", title = "Análise da variável salário médio",
+            summary.stat = c("mean", "max","min"))
+
+```
+O salário médio por hora na amostra é de 5,896 $USD/hr.
+
+## Questão 9C
+```{r}
+women_wage <- wooldridge::wage1 %>% 
+  dplyr::filter(female==1) %>% 
+  nrow()
+
+men_wage <- wooldridge::wage1 %>% 
+  dplyr::filter(female==0) %>% 
+  nrow()
+
+print(women_wage)
+print(men_wage)
+```
+
+Na amostra existem 252 mulheres e 274 homens.
+
+## Questão 9D
+
+Para estimar a equação $wage = \beta_{0} + \beta_{1}educ +u$ podemos estimar os parâmetros $\beta_{0}$ e $\beta_{1}$ separadamente ou usar a função lm.
+
+```{r}
+educ <- wooldridge::wage1 %>% 
+  dplyr::select(educ) %>%
+  purrr::as_vector() %>% 
+  as.numeric()
+
+wage <- wooldridge::wage1 %>% 
+  dplyr::select(wage) %>% 
+  purrr::as_vector() %>% 
+  as.numeric()
+
+beta_1 <- sum((educ- mean(educ))*(wage - mean(wage)))/(sum((educ-mean(educ))^2))
+
+beta_0 <- mean(wage) - beta_1 * mean(educ)
+
+print(beta_1)
+print(beta_0)
+
+rls_base <- wooldridge::wage1 %>% 
+  dplyr::select(educ,wage)
+
+rls_wage <- lm(wage ~ educ, rls_base) %>% 
+  coefficients()
+
+print(rls_wage)
+```
+Por ambos modos, temos que $\hat{wage} = -0,9048516 +0,5413593 \hat{educ}$, sendo $\hat{\beta_{1}}=0,5413593$ e $\hat{\beta_{0}}= -0,9048516$. 
+
+Se temos que o impacto de 10 anos de educação é dado por $\Delta \hat{wage} = 0,5413593 \Delta \hat{educ}$, se $\Delta \hat{educ} =10$, tem-se que $\Delta \hat{wage} = 5,413593 USD/hour$.

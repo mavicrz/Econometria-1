@@ -1,0 +1,350 @@
+---
+title: "Lista 3"
+author: "Maria Vitória Cruz"
+date: "21 de abril de 2022"
+documentclass: article
+papersize: a4
+fontsize: 12pt
+linestretch: 1.5
+geometry: "left = 1.0in, right = 1.0in, top = 1.0in, bottom = 1.0in"
+indent: true
+output:
+  bookdown::pdf_document2:
+    toc: false
+    latex_engine: pdflatex
+    number_sections: true
+    extra_dependencies:
+      fontenc: ["T1"]
+      inputenc: ["utf8"]
+      babel: ["english, latin, brazil"]
+      lipsum: null
+      float: null
+      booktabs: null
+      threeparttable: null
+      array: null
+      graphicx: null
+      tabularx: null
+      adjustbox: null
+      amsmath: null
+      amssymb: null
+      amsthm: null
+header-includes:
+  - \usepackage{floatrow}
+  - \floatsetup[figure]{capposition=top}
+  - \floatsetup[table]{style=plaintop}
+  - \usepackage{hyperref}
+  - \hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue, filecolor=blue}
+---
+
+```{r setup, include=FALSE}
+xfun::pkg_attach(c('dplyr','tidyr','purrr','wooldridge','stargazer'), install = T)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Questão 1
+## Questão 1A
+
+O termo de erro são os fatores que afetam y e não são observados como x (no modelo é o u em $y_{i}= \alpha + \beta x_{i} + u_{i}$. O resíduo é a diferença entre o $y_{i}$ até a reta estimad
+a $\hat{y_{i}}$, ou seja, o que pode restar de diferença entre a reta verdadeira e a estimação.
+
+## Questão 1B
+
+Homoscedasticidade significa que o erro u tem a mesma variância independente do valor da variável explicativa, ou seja, $Var(u|X)= \sigma^{2}$, a variância do termo de erro condicionado a x é constante.
+
+## Questão 1C
+
+Heteroscedasticidade é quando a variância do termo de erro depende de x, ou seja, como $Var(u|x) = Var(y|x)$, existe heteroscedasticidade sempre que a variância de y condicionado a x é uma função de x.
+
+## Questão 1D
+
+A heteroscedasticidade não permite provar que $Var(\hat{\beta_{1}}) = \frac{\sigma^{2}}{SQT_{x}}$, e assim, gerar uma relação em que a variância de $\hat{\beta_{1}}$ depende da variância do erro sem que essa seja carregada de variação da variável explicativa. Pode ser um problema pois sem a hipótese de homoscedasticidade, não implica-se propriedades de eficiência, como entender intervalos de confiança e testes de hipótese em análise de regressão múltipla.
+
+# Questão 2
+Com o modelo de RLS $y_{i} = \alpha +\beta x_{i} + u_{i}$
+
+## Questão 2A
+A primeira hipótese para o modelo de RLS é que o modelo populacional precisa ser linear nos parâmetros: uma variável dependente y está relacionada a outra variável independente x e ao erro u como $y = \alpha + \beta x +u$, em segundo lugar deve haver uma amostra aleatória $\{(x_{i},y_{i}) | i =1,2,...n\}$. Em terceiro ponto, a variância amostral na variável explicativa. Em quarto ponto, a média condicional dos erros na variável explicativa deve ser zero. Além disso, é necessário que exista homoscedasticidade $var(u|x)= \sigma^{2}$.
+
+## Questão 2B
+Como temos que o estimador de MQO é de dado por $\hat{\beta} = \frac{\sum_{i=1}^{n} (x_{i} - \bar{x})(y_{i} - \bar{y})}{\sum_{i=1}^{n} (x_{i} - \bar{x})^{2}}$, segundo as hipóteses temos que $E(\hat{\beta_{0}}) = \beta_{0}$ e $E(\hat{\beta_{1}}) = \beta_{1}$.
+
+$$E(\hat{\beta_{1}}) = \beta_{1} + E(\frac{1}{SQT_{x}} \sum^{n}_{i=1}d_{i}u_{i}) \implies E(\hat{\beta_{1}}) = \beta_{1} + \frac{1}{SQT_{x}}\sum^{n}_{i=1}d_{i}E(U_{i}) \implies E(\hat{\beta_{1}}) = \beta_{1}$$
+Para $\hat{\beta_{0}}$ tem-se o processo parecido, temos que:
+
+$$\frac{\sum^{n}_{i=1} y_{i}}{n} = \frac{\sum^{n}_{i=1} (\beta_{0} + \beta_{1}x_{i} + u_{i})}{n}$$
+$$\bar{y} = \frac{\sum^{n}_{i=1} \beta_{0}}{n} + \frac{\sum^{n}_{i=1} \beta_{1}x_{i}}{n} + \frac{\sum^{n}_{i=1}  u_{i}}{n} $$
+$$\bar{y} = \beta_{0} + \beta_{1}\frac{\sum^{n}_{i=1} x_{i}}{n} + \bar{u} $$
+$$\bar{y} = \beta_{0} + \beta_{1} \bar{x} + \bar{u}$$
+
+$$\hat{\beta_{0}} = \bar{y} - \beta_{1} \bar{x} \implies \hat{\beta_{0}} = \beta_{0} + \beta_{1} \bar{x} + \bar{u} -\hat{\beta_{1}} \bar{x}$$
+
+$$\hat{\beta_{0}} = \beta_{0} + \bar{x} (\beta_{1} - \hat{\beta_{1}}) + \bar{u}$$
+$$E(\hat{\beta_{0}}) = E(\beta_{0} + \bar{x} (\beta_{1} - \hat{\beta_{1}}) + \bar{u}) \implies E(\hat{\beta_{0}}) = \beta_{0} + E(\bar{x} (\beta_{1} - \hat{\beta_{1}})) + E(\bar{u}) $$
+$$E(\hat{\beta_{0}}) = \beta_{0} + \bar{x} E(\beta_{1} - \hat{\beta_{1}})$$
+
+Como $E(\hat{\beta_{1}}) = \beta_{1}$, $E(\beta_{1} - \hat{\beta_{1}}) = 0$, logo:
+
+
+$$E(\hat{\beta_{0}}) = \beta_{0}$$
+Para ser consistente, o estimador deve ser tal que converge em probabilidade para o parâmetro, assim, tem-se:
+
+$$lim P(|\hat{\beta_{1}}- \beta_{1}| \geq \epsilon) = 0$$
+Como $\hat{\beta_{1}}$ é não viesado, podemos verificar que:
+
+$$\underset{n \rightarrow +\infty}{lim} V(\hat{\beta_{1}}) =0$$
+
+$$ \underset{n \rightarrow +\infty}{lim} V(\hat{\beta_{1}}) = \underset{n \rightarrow +\infty}{lim} \frac{\sigma^{2}}{\sum^{n}_{i=1} (x_{i} -  \bar{x})^{2}}$$
+$$\underset{n \rightarrow +\infty}{lim} V(\hat{\beta_{1}}) =0$$
+
+## Questão 2C
+A variância de $\beta_{1}$ é dada por:
+
+$$V(\hat{\beta_{1}}| X)=V(\beta_{1} + \frac{1}{SQT_{x}} \sum^{n}_{i=1} (x_{i} -  \bar{x})u_{i} | X)$$
+$$V(\hat{\beta_{1}}| X)= \frac{1}{SQT_{x}^{2}} V(\sum^{n}_{i=1} (x_{i} -  \bar{x})u_{i})$$
+$$V(\hat{\beta_{1}}| X)= \frac{\sum^{n}_{i=1} (x_{i} -  \bar{x})^{2}}{SQT_{x}^{2}} V(u_{i}|X)$$
+$$V(\hat{\beta_{1}}| X)= \frac{\sum^{n}_{i=1} (x_{i} -  \bar{x})^{2} \sigma^{2}}{SQT_{x}^{2}}$$
+$$V(\hat{\beta_{1}}| X)= \frac{\sigma^{2}}{\sum^{n}_{i=1} (x_{i} -  \bar{x})^{2}}$$
+A variância assintótica é dada por:
+
+$$VarAss(\hat{\beta_{1}}) = \underset{n \rightarrow \infty}{lim} V(\hat{\beta_{1}})$$
+$$VarAss(\hat{\beta_{1}}) = \underset{n \rightarrow \infty}{lim} \frac{\sigma^{2}}{\sum^{n}_{i=1} (x_{i} -  \bar{x})^{2}}$$
+$$VarAss(\hat{\beta_{1}}) = 0$$
+
+# Questão 3
+
+Com um modelo de regressão linear simples $y_{i} =  \alpha + \beta x_{i} +u_{i}$ supondo que, por definição, $y_{i}^{*} = by_{i}$ e $x_{i}^{*} = c x_{i}$ tq b,c $\in \;\; \mathbf{R}$.
+
+## Questão 3A
+Temos que a regressão para $y_{i}^{*}$ é dada por:
+$$y_{i}^{*} =  \tilde{\alpha} + \tilde{\beta}x_{i}^{*} + u_{i}^{*}$$
+$$y_{i}b=  \tilde{\alpha} + \tilde{\beta}x_{i}c + u_{i}^{*}$$
+$$u_{i}^{*}= y_{i}b - \tilde{\alpha} - \tilde{\beta}x_{i}c$$
+$$SQR = \sum^{n}_{i=1} (y_{i}b - \tilde{\alpha} - \tilde{\beta}x_{i}c)^{2}$$
+$$\frac{dSQR}{d\tilde{\beta}} = -2\sum^{n}_{i=1} (y_{i}b - \tilde{\alpha} - \tilde{\beta}x_{i}c)(x_{i}c) = 0$$
+$$\sum^{n}_{i=1} bcy_{i}x_{i} - \tilde{\alpha}x_{i}c - \tilde{\beta}(x_{i}c)^{2} = 0$$
+$$bc\sum^{n}_{i=1} y_{i}x_{i} - c\tilde{\alpha}\sum^{n}_{i=1}x_{i} - \tilde{\beta}c^{2}\sum^{n}_{i=1}x_{i}^{2} = 0$$
+
+$$\tilde{\beta}c^{2}\sum^{n}_{i=1}x_{i}^{2}=bc\sum^{n}_{i=1} y_{i}x_{i} - c\tilde{\alpha}\sum^{n}_{i=1}x_{i}$$
+
+$$\tilde{\beta}=\frac{bc\sum^{n}_{i=1} y_{i}x_{i} - c\tilde{\alpha}\sum^{n}_{i=1}x_{i}}{c^{2}\sum^{n}_{i=1}x_{i}^{2}}$$
+$$\tilde{\beta}=\frac{b\sum^{n}_{i=1} y_{i}x_{i} }{c\sum^{n}_{i=1}x_{i}^{2}} -\frac{\tilde{\alpha}\sum^{n}_{i=1}x_{i}}{c^{2}\sum^{n}_{i=1}x_{i}^{2}}$$
+$$\frac{dSQR}{d\tilde{\beta}} = -2\sum^{n}_{i=1} (y_{i}b - \tilde{\alpha} - \tilde{\beta}x_{i}c)= 0$$
+$$\sum^{n}_{i=1} y_{i}b - \sum^{n}_{i=1}\tilde{\alpha} - \sum^{n}_{i=1}\tilde{\beta}x_{i}c= 0$$
+$$n\tilde{\alpha}=\sum^{n}_{i=1} y_{i}b  - \sum^{n}_{i=1}\tilde{\beta}x_{i}c$$
+$$\hat{\tilde{\alpha}}= b\bar{y}  - \tilde{\beta}c\bar{x}$$
+$$bc\sum^{n}_{i=1} y_{i}x_{i} - c\sum^{n}_{i=1}(b\bar{y}  - \tilde{\beta}c\bar{x})x_{i} - \tilde{\beta}c^{2}\sum^{n}_{i=1}x_{i}^{2} = 0$$
+
+
+$$\tilde{\beta}c (\sum^{n}_{i=1}x_{i}^{2} -\sum^{n}_{i=1}\bar{x}x_{i})=b (\sum^{n}_{i=1} y_{i}x_{i} - \sum^{n}_{i=1}\bar{y}x_{i})$$
+$$\tilde{\beta}=b \frac{(\sum^{n}_{i=1} y_{i}x_{i} - \sum^{n}_{i=1}\bar{y}x_{i})}{c (\sum^{n}_{i=1}x_{i}^{2} -\sum^{n}_{i=1}\bar{x}x_{i})}$$
+$$\hat{\tilde{\beta}}=b \frac{\sum^{n}_{i=1}x_{i} (y_{i} - \bar{y})}{c \sum^{n}_{i=1}x_{i} (x_{i} - \bar{x})}$$
+$$\hat{\tilde{\beta}}= \frac{b}{c} \hat{\beta}$$
+
+## Questão 3B
+$$V(\hat{\tilde{\beta}}| X)=V(\frac{b}{c}\tilde{\beta} + \frac{b}{c}\frac{1}{SQT_{x}} \sum^{n}_{i=1} (x_{i} -  \bar{x})u_{i} | X)$$
+$$V(\hat{\tilde{\beta}}| X)= \frac{b^{2}}{c^{2}SQT_{x}^{2}}V(\sum^{n}_{i=1} (x_{i} -  \bar{x})u_{i} | X)$$
+$$V(\hat{\tilde{\beta}}| X)= \frac{b^{2}\sum^{n}_{i=1} (x_{i} -  \bar{x})^{2}}{c^{2}SQT_{x}^{2}}V(u_{i} | X)$$
+$$V(\hat{\tilde{\beta}}| X)= \frac{b^{2}\sum^{n}_{i=1} (x_{i} -  \bar{x})^{2}}{c^{2}SQT_{x}^{2}} \sigma^{2}$$
+$$V(\hat{\tilde{\beta}}| X)= \frac{b^{2}\sigma^{2}}{c^{2}SQT_{x}}$$
+$$V(\hat{\tilde{\beta}}| X)= \frac{b^{2}\sigma^{2}}{c^{2}\sum^{n}_{i=1} (x_{i} -  \bar{x})^{2}}$$
+$$V(\hat{\tilde{\beta}}| X)= \frac{b^{2}\sigma^{2} \beta}{c^{2}\sum^{n}_{i=1}x_{i} (y_{i} - \bar{y})}$$
+
+## Questão 3C
+O R-quadrado anterior era:
+$$R^{2} =\frac{\sum^{n}_{i=1}(\hat{y_{i}} - \bar{y})^{2}}{\sum^{n}_{i=1}(y_{i} - \bar{y})^{2}}$$
+Agora é:
+$$R^{2} =\frac{\frac{1}{b}\sum^{n}_{i=1}(\hat{y_{i}}^{*}  - \bar{y^{*}})^{2}}{\frac{1}{b}\sum^{n}_{i=1}(y_{i}^{*} - \bar{y^{*}})^{2}}$$
+$$R^{2} =\frac{\sum^{n}_{i=1}(\hat{y_{i}}^{*} - \bar{y^{*}})^{2}}{\sum^{n}_{i=1}(y_{i}^{*} - \bar{y^{*}})^{2}}$$
+Portanto R-quadrado continua o mesmo, a variação de um escalar não afeta a fração da variação explicada pela total.
+
+# Questão 4
+Tem-se o modelo de regressão linear simples.
+
+## Questão 4A
+O TGM diz que para uma regressão linear simples, os estimadores $\hat{\beta_{0}}^{MQO}$ e $\hat{\beta_{1}}^{MQO}$ são best linear unbiased estimators, ou seja,  com menos variância dentre os estimadores não-viesados.
+
+Ou seja:
+$(i) E(u_{i}| X_{1},...,X_{n}) =0$ e $(ii) Var(u_{i}|X_{1},..X_{n}) = \sigma^{2}$ e $(iii) E(u_{i},u_{j}|x_{1},...,x_{n}) = 0$ 
+
+## Questão 4B
+As hipóteses de Gauss-Markov são tais que se os erros do modelo linear são $E(u|X) = E(u)$, $E(u)=0$ e possuem variâncias iguais$.
+
+As hipóteses de MQO atendem às hipóteses de TGM, pois, (i) é um modelo linear nos parâmetros, (ii) tem uma a.a. representativa com n observações, (iii) existe variância em X, $\sum (x_{i} - \bar{x}) >0$, (iv) $E(u|X) = E(u) = E(u)=0$ e (v) $Var(u|X) = \sigma^{2}$.
+
+Os pontos (i), (iv) atendem às duas primeiras hipóteses e o ponto (v) atende à última hipótese.
+
+## Questão 4C
+Deve ser vardade para $\tilde{\beta} = \sum^{n}_{i=1} \tilde{a}_{i}Y_{i}$, que:
+
+$$\tilde{\beta_{1}} = \sum^{n}_{i=1} \tilde{a}_{i} (\beta_{0} + \beta_{1}x_{i} + u_{i})$$
+
+$$\tilde{\beta_{1}} = \sum^{n}_{i=1} \tilde{a}_{i}\beta_{0} + \tilde{a}_{i}\beta_{1}x_{i} + \tilde{a}_{i}u_{i}$$
+$$\tilde{\beta_{1}} = \beta_{0}\sum^{n}_{i=1} \tilde{a}_{i} + \beta_{1}\sum^{n}_{i=1}\tilde{a}_{i}x_{i} + \sum^{n}_{i=1}\tilde{a}_{i}u_{i}$$
+
+$$E(\tilde{\beta_{1}}|X)  = E(\sum^{n}_{i=1} \tilde{a}_{i}Y_{i} |X)= \sum^{n}_{i=1} \tilde{a}_{i}Y_{i}$$
+
+
+$$E(\tilde{\beta_{1}}|X)  = E(\beta_{0}\sum^{n}_{i=1} \tilde{a}_{i}|X) + E(\beta_{1}\sum^{n}_{i=1}x_{i}\tilde{a}_{i}|X) + E(\sum^{n}_{i=1}\tilde{a}_{i}u_{i} |X)$$
+
+$$E(\tilde{\beta_{1}}|X)  = \beta_{0}E(\sum^{n}_{i=1} \tilde{a}_{i}|X) + \beta_{1}E(\sum^{n}_{i=1}x_{i}\tilde{a}_{i}|X) + \sum^{n}_{i=1}\tilde{a}_{i}E(u_{i} |X)$$
+$$E(\tilde{\beta_{1}}|X)  = \beta_{0}\sum^{n}_{i=1} \tilde{a}_{i}+ \beta_{1}\sum^{n}_{i=1}x_{i}\tilde{a}_{i}$$
+$$E(\tilde{\beta_{1}}|X) = \beta_{1}$$
+Assim, $\sum^{n}_{i=1} \tilde{a}_{i}=0$ e $\sum^{n}_{i=1}x_{i}\tilde{a}_{i}=1$
+
+## Questão 4D
+
+$$V(\tilde{\beta}| X)=V(\beta_{0}\sum^{n}_{i=1} \tilde{a}_{i} + \beta_{1}\sum^{n}_{i=1}\tilde{a}_{i}x_{i} + \sum^{n}_{i=1}\tilde{a}_{i}u_{i} | X)$$
+
+$$V(\tilde{\beta}| X)=V( \beta_{1} + \sum^{n}_{i=1}\tilde{a}_{i}u_{i} | X)$$
+$$V(\tilde{\beta}| X)= \sum^{n}_{i=1}\tilde{a}_{i}^{2} V(u_{i} | X)$$
+$$V(\tilde{\beta}| X)= \sum^{n}_{i=1}\tilde{a}_{i}^{2} \sigma^{2}$$
+
+## Questão 4E
+$$\hat{\beta}^{MQO} = \frac{\sum_{i=1}^{n} (x_{i} - \bar{x})y_{i}}{\sum_{i=1}^{n} (x_{i} - \bar{x})x_{i}}$$
+$$a_{i} = \frac{(x_{i} - \bar{x})}{\sum_{i=1}^{n} (x_{i} - \bar{x})x_{i}}$$
+Para mostrar que $\sum_{i=1}^{n} a_{i} =0$, temos:
+
+$$\sum_{i=1}^{n} a_{i} = \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})}{\sum_{i=1}^{n} (x_{i} - \bar{x})x_{i}}$$
+$$\frac{\sum_{i=1}^{n}(x_{i} - \bar{x})}{\sum_{i=1}^{n} (x_{i} - \bar{x})x_{i}} = 0$$
+$$\sum_{i=1}^{n}(x_{i} - \bar{x}) = 0$$
+
+$$\sum_{i=1}^{n}x_{i} = \sum_{i=1}^{n} \bar{x}$$
+$$\sum_{i=1}^{n}x_{i} = n \bar{x}$$
+$$\bar{x} = \bar{x}$$
+Para $\sum_{i=1}^{n}a_{i}x_{i} =1$, temos que:
+
+$$\sum_{i=1}^{n}a_{i}x_{i} = \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})x_{i}}{\sum_{i=1}^{n} (x_{i} - \bar{x})x_{i}}=1$$
+
+# Questão 5
+## Questão 5A
+$Y = X\beta +u$ onde $X_{n,k}$ e $\beta_{k,1}$, assim temos:
+
+$$\begin{pmatrix}
+y_{1}\\ 
+y{2}\\ 
+.\\
+.\\
+.\\
+y_{n}
+\end{pmatrix} = \begin{pmatrix}
+1 & x_{11} & ... & x_{1k-1}\\ 
+1 & x_{21} & ... & x_{2k-1}\\ 
+. & . &\\
+. & & .\\
+. & & & .\\
+1 & x_{n1} & ... & x_{nk-1}
+\end{pmatrix} * \begin{pmatrix}
+\beta_{0}\\ 
+\beta_{1}\\ 
+.\\
+.\\
+.\\
+\beta_{k-1}
+\end{pmatrix}  +  \begin{pmatrix}
+u_{1}\\ 
+u{2}\\ 
+.\\
+.\\
+.\\
+u_{n}
+\end{pmatrix}$$ 
+
+O modelo se assemelha ao de RLS, se $k=2$, poderiamos ter o RLS, entretanto ele não permite incluir outras variáveis e estes fatores ficam no erro, o que pode gerar um impacto evitável, assim prefiro o RLM.
+
+## Questão 5B
+$$min \; \sum \hat{u}_{i}^{2}$$
+Assim, temos:
+$$\hat{U} = \begin{pmatrix}
+\hat{u_{1}}\\ 
+\hat{u_{2}}\\ 
+.\\
+.\\
+.\\
+\hat{u_{n}}
+\end{pmatrix}$$
+
+$$\hat{U}' \hat{U} = \sum \hat{u}_{i}^{2}$$
+$$min \; \hat{U}' \hat{U} \implies SQR= Y'Y - \hat{\beta}X'Y - Y'X \hat{\beta} + X\hat{\beta}'X\hat{\beta}$$
+$$SQR= Y'Y - 2\hat{\beta}X'Y + X\hat{\beta}'X\hat{\beta}$$
+$$\frac{dSQR}{d\hat{\beta}}= -2X'Y + 2X'X\hat{\beta} = 0$$
+
+$$\hat{\beta} = (X'X)^{-1}X'Y$$
+
+## Questão 5C
+$$\hat{\beta} = (X'X)^{-1}X'(X\beta +u)$$
+$$\hat{\beta} = (X'X)^{-1}X'X\beta +(X'X)^{-1}X'u$$
+$$\hat{\beta} = \beta +(X'X)^{-1}X'u$$
+$$E(\hat{\beta}|X) = E(\beta +(X'X)^{-1}X'u|X)$$
+$$E(\hat{\beta}|X) = E(\beta|X) + E((X'X)^{-1}X'u|X)$$
+$$E(\hat{\beta}|X) = \beta + (X'X)^{-1}X'E(u|X)$$
+$$E(\hat{\beta}|X) = \beta$$
+
+# Questão 7
+
+## Questão 7A
+Temos que $\hat{\beta_{0}} = \bar{y} - \hat{\beta_{1}}\bar{x}$ e $\hat{\beta_{1}} = \frac{cov(x,y)}{var(x)}$
+
+$$\hat{\beta_{1}} = \frac{cov(x_{1},y)}{var(x_{1})}$$
+
+$$\hat{\beta_{1}} = \frac{0.22}{0.8} \implies \hat{\beta_{1}} = 0.275$$
+$$\hat{\beta_{0}} = \bar{y} - \hat{\beta_{1}}\bar{x}$$
+$$\hat{\beta_{0}} = 6.39 - 0.275*7.24 \implies \hat{\beta_{0}}=4.399$$
+Se existe homoscedasticidade, a variância de $E(u|X) = \sigma^{2}$, então vale que $R^{2} = corr(x_{1},y)^{2}$
+
+$$corr(x_{1},y) = \frac{cov(x_{1},y)}{\sqrt{var(x_{1})var(y)}}$$
+
+$$corr(x_{1},y) = \frac{0.22}{\sqrt{0.26*0.8}} \implies corr(x_{1},y) = 0.4823819$$
+$$R^{2} = corr(x_{1},y)^{2} \implies R^{2} = 0.2326923$$
+
+## Questão 7B
+$$\hat{\beta_{1}} = \frac{cov(x_{2},y)}{var(x_{2})}$$
+
+$$\hat{\beta_{1}} = \frac{0.32}{2.4} \implies \hat{\beta_{1}} = 0.13$$
+$$\hat{\beta_{0}} = \bar{y} - \hat{\beta_{1}}\bar{x}$$
+$$\hat{\beta_{0}} = 6.39 - 0.13*4 \implies \hat{\beta_{0}}=5.87$$
+
+# Questão 8
+```{r}
+base <- wooldridge::k401k
+```
+
+## Questão 8A
+```{r}
+analise_educ <- base %>%
+  dplyr::select(prate, mrate) %>% 
+  as.data.frame() %>% 
+  stargazer(type = "text", title = "Média das variáveis",
+            summary.stat = c("mean"))
+```
+
+## Questão 8B
+```{r}
+rls_base <- base %>% 
+  dplyr::select(mrate,prate)
+
+rls_prate <- lm(prate ~ mrate, rls_base) %>% 
+  summary()
+
+print(nrow(rls_base))
+print(rls_prate)
+```
+
+A equação estimada da regressão é $\hat{prate} = 83,075455 +  5,861079 mrate$, com $\hat{\beta_{0}}=83,075455$ e $\hat{\beta_{1}}=5,861079$, e R-quadrado é 0,0747, o tamanho da amostra é de 1534 observações.
+
+## Questão 8C
+
+O $\beta_{0}$ sugere que para nenhuma contribuição do da firma (mrate = 0), o percentual de trabalhadores elegíveis é de 83%. O coeficiente de mrate sugere que dada participação da firma, uma unidade a mais pode aumentar a porcentagem em 5,86%.
+
+## Questão 8D
+
+Quando mrate = 3,5, temos que o valor previsto para y será de 103,5892 o percentual de trabalhadores elegíveis com uma conta ativa é maior que 100%, então se o valor de 1 dólar for igualado a contribuição de 3 dólares e 50 centavos da firma, mais que 100% seriam elegíveis ao programa.
+
+```{r}
+x <- 3.5
+y <-  83.075455 +  5.861079 *x
+
+print(y)
+```
+
+## Questão 8E
+O R-quadrado quantifica a variação da variável explicada pela variação total, ela é de 0,074 o que não é muito, pois está mais próxima de zero que de um.

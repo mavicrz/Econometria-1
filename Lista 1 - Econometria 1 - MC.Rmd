@@ -1,0 +1,539 @@
+---
+title: "Lista 1 "
+author: "Maria Vitória Cruz"
+date: "17 de março de 2021"
+documentclass: article
+papersize: a4
+fontsize: 12pt
+linestretch: 1.5
+geometry: "left = 1.0in, right = 1.0in, top = 1.0in, bottom = 1.0in"
+indent: true
+output:
+  bookdown::pdf_document2:
+    toc: false
+    latex_engine: pdflatex
+    number_sections: true
+    extra_dependencies:
+      fontenc: ["T1"]
+      inputenc: ["utf8"]
+      babel: ["english, latin, brazil"]
+      lipsum: null
+      float: null
+      booktabs: null
+      threeparttable: null
+      array: null
+      graphicx: null
+      tabularx: null
+      adjustbox: null
+      amsmath: null
+      amssymb: null
+      amsthm: null
+header-includes:
+  - \usepackage{floatrow}
+  - \floatsetup[figure]{capposition=top}
+  - \floatsetup[table]{style=plaintop}
+  - \usepackage{hyperref}
+  - \hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue, filecolor=blue}
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Questão 1
+## Questão 1A
+Em princípio, deve-se simplificar a equação abaixo:
+
+$$Cov(X,Y)= \mathbf{E}[(X-\mu_{x})Y]\mathbf{E}[(Y-\mu_{y})X]$$
+
+$$Cov(X,Y)= \mathbf{E}(XY-Y\mu_{x})\mathbf{E}(XY-X\mu_{y})$$
+
+$$Cov(X,Y)= (\mathbf{E}(XY)-\mu_{x}\mathbf{E}(Y))(\mathbf{E}(XY)-\mu_{y}\mathbf{E}(X))$$
+
+$$Cov(X,Y)= (\mathbf{E}(XY)-\mathbf{E}(X)\mathbf{E}(Y))(\mathbf{E}(XY)-\mathbf{E}(Y)\mathbf{E}(X))$$
+
+$$Cov(X,Y)= [\mathbf{E}(XY)-\mathbf{E}(X)\mathbf{E}(Y)]^{2} \;\; (i)$$ 
+
+
+Depois, tem-se a relação que define a covariância entre duas v.a., dada por:
+
+$$Cov(X,Y)= \mathbf{E}[(X-\mu_{x})(Y-\mu_{y})]$$
+
+$$Cov(X,Y)= \mathbf{E}[(X-\mu_{x})(Y-\mu_{y})]$$
+
+$$Cov(X,Y)= \mathbf{E}(XY-Y\mu_{x} -X\mu_{y} +\mu_{x}\mu_{y})$$
+
+$$Cov(X,Y)= \mathbf{E}(XY) -\mu_{x}\mathbf{E}(Y) -\mu_{y}\mathbf{E}(X) +\mathbf{E}(Y)\mathbf{E}(X)$$
+
+$$Cov(X,Y)= \mathbf{E}(XY) -\mu_{x}\mathbf{E}(Y) -\mu_{y}\mathbf{E}(X) +\mathbf{E}(Y)\mathbf{E}(X)$$
+
+$$Cov(X,Y)= \mathbf{E}(XY) - \mathbf{E}(Y)\mathbf{E}(X) \;\; (ii)$$
+
+Como (i) $\neq$ (ii), (i) é falso. $\square$
+
+## Questão 1B
+
+Temos que a afirmação é $\mu_{x}= 0 \;\; \lor \;\; \mu_{y}=0 \; \implies Cov(X,Y)= \mathbf{E}(XY) \;\; (i)$, logo podemos verificar com a definição de covariância.
+
+$$Cov(X,Y)= \mathbf{E}[(X-\mu_{x})(Y-\mu_{y})]$$, se $\mu_{x}=0$
+
+$$Cov(X,Y)= \mathbf{E}[(X)(Y-\mu_{y})]$$
+
+$$Cov(X,Y)= \mathbf{E}[(XY-X\mu_{y})]$$
+
+$$Cov(X,Y)= \mathbf{E}(XY)-\mu_{y}\mathbf{E}(X)$$
+
+$$Cov(X,Y)= \mathbf{E}(XY)\;\; (ii)$$ 
+
+Depois, tem-se a equação com $\mu_{y}=0$
+
+$$Cov(X,Y)= \mathbf{E}[(X-\mu_{x})(Y-\mu_{y})]$$, se $\mu_{y}=0$
+
+$$Cov(X,Y)= \mathbf{E}[(X-\mu_{x})(Y)]$$
+
+$$Cov(X,Y)= \mathbf{E}[(XY-\mu_{x}Y)]$$
+
+$$Cov(X,Y)= \mathbf{E}(XY)-\mu_{x}\mathbf{E}(Y)$$
+
+$$Cov(X,Y)= \mathbf{E}(XY) \;\; (iii)$$ 
+
+Como temos que (i) = (ii) $\land$ (i) = (iii) $\therefore$ (i) é verdadeiro. $\square$
+
+## Questão 1C
+
+Temos que a afirmação é $\mu_{x}= 0 \;\; \land \;\; \mu_{y}=0 \; \implies \rho(X,Y)= 0$ (i), logo podemos verificar com a definição de correlação.
+
+Se $0 \leq \sigma_{x}^{2} \leq \infty$ e $0 \leq \sigma_{y}^{2} \leq \infty$, a correlação é definida como:
+
+$$\rho(X,Y) = \frac{Cov(X,Y)}{\sigma_{x}\sigma_{y}}$$
+
+Primeiramente, tem-se a relação da covariância entre estas variáveis.
+
+$$Cov(X,Y)= \mathbf{E}[(X-\mu_{x})(Y-\mu_{y})]$$
+
+$$Cov(X,Y)= \mathbf{E}(XY)$$
+
+Assim, tem-se a relação com a correlação:
+$$\rho(X,Y) = \frac{ \mathbf{E}(XY)}{\sigma_{x}\sigma_{y}}$$
+Em seguida, define-se a equação da variância levando ao seu parâmetro:
+
+$$\sigma^{2}_{x} = Var(X) = \mathbf{E}[(X- \mu_{x})^{2}]$$
+Para $\mu_{x} = 0$, tem-se:
+
+$$\sigma^{2}_{x} = \mathbf{E}(X^{2})$$
+Simetricamente tem-se $\sigma^{2}_{y} = \mathbf{E}(Y^{2})$ para $\mu_{y}$, logo, tem-se:
+
+$$\rho(X,Y) = \frac{ \mathbf{E}(XY)}{\sqrt{\mathbf{E}(Y^{2})}\sqrt{\mathbf{E}(X^{2})}}$$
+$$\rho(X,Y) = \frac{\mathbf{E}(XY)}{\sqrt{\mathbf{E}(Y^{2})\mathbf{E}(X^{2})}}$$
+
+Por fim, $\rho(X,Y)$ só será igual a zero se $\mathbf{E}(XY)$ for igual a zero, as hipóteses iniciais não implicam  $\rho(X,Y)=0$.
+
+$\rho(X,Y) \neq 0 \; \; \therefore$  a afirmação é falsa $\square$.
+
+## Questão 1D
+
+Se $\mathbf{E}(Y|X) = \mu_{y}$ então $Cov(X,Y)=0$. Para avaliar a afirmação, define-se a esperança condicional como:
+
+$$\mathbf{E}(Y|X =x) = \int_{-\infty}^{\infty} \; y \;\; dF_{Y|X}(y|X=x)$$
+$$\mathbf{E}(Y|X =x) = \int_{-\infty}^{\infty} \; y \; \frac{f_{x,y}(x,y)}{f_{x}(x)} dy \;\; , f_{x}(x)>0$$
+$$\mathbf{E}(\mathbf{E}(Y|X)) = \int_{-\infty}^{\infty} \; \mathbf{E}(Y|X =x) \;  dF_{X}(x)$$
+$$\mathbf{E}(\mathbf{E}(Y|X)) = \int_{-\infty}^{\infty} \Big(\int_{-\infty}^{\infty} y \frac{f_{x,y}(x,y)}{f_{x}(x)} \;  dy \Big) F_{X}(x) dx $$
+$$\mathbf{E}(\mathbf{E}(Y|X)) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} y f_{x,y}(x,y)\;  dy dx)$$
+$$\mathbf{E}(\mathbf{E}(Y|X)) = \int_{-\infty}^{\infty} y \; \; \Big(\int_{-\infty}^{\infty} f_{x,y}(x,y) dx\Big) \;\; dy$$
+$$\mathbf{E}(\mathbf{E}(Y|X)) = \int_{-\infty}^{\infty} y f_{Y}(y) dy = \mathbf{E}(Y)$$
+Portanto $\mathbf{E}(\mathbf{E}(Y|X)) = \mathbf{E}(Y)$, assim,  $\mathbf{E}(XY|X=x) = x\mathbf{E}(Y|X=x)$
+
+$$\therefore \mathbf{E}(XY|X) = x\mathbf{E}(Y|X) \implies \mathbf{E}(XY) = \mathbf{E}[X * \mathbf{E}(Y|X)] \;\; (i)$$
+Se $\mathbf{E}(Y|X) = \mu_{y} \;\; (ii) \implies Cov(x,y)=0 \implies \mathbf{E}(XY)= \mathbf{E}(X)\mathbf{E}(X)$, assim, tem-se com (i) e (ii), a seguinte relação:
+
+$$\mathbf{E}(XY) = \mathbf{E}[X * \mathbf{E}(Y|X)]$$
+
+$$\mathbf{E}(XY) = \mathbf{E}[X * \mu_{y}]$$
+
+$$\mathbf{E}(XY) = \mu_{y}\mathbf{E}(X) \implies \mathbf{E}(XY) = \mathbf{E}(Y)\mathbf{E}(X)$$
+
+$$Cov(x,y)= \mathbf{E}(XY) - \mathbf{E}(X)\mathbf{E}(Y) \implies Cov(x,y) =0$$
+
+A afirmação é correta $\square$.
+
+## Questão 1E
+
+Se $Cov(x,y) > 0$ então $0 < \rho(X,Y) \leq 1$. Para avaliar esta afirmação, podemos observar a relação:
+
+$$Cov(X,Y) >0  \implies \left\{\begin{matrix}
+X > \mu_{x} \land Y > \mu_{y} (i)\\ 
+X < \mu_{x} \land Y < \mu_{y} (ii)
+\end{matrix}\right.$$
+
+Para (i) $\rho(X,Y) =\frac{Cov(X,Y)}{\sigma_{x}\sigma_{y}}$ como $\sigma_{x} \land \sigma_{y} >0 \implies \sigma_{x}\sigma_{y}>0$, para $\rho(X,Y)>0$  temos que a covariância tem que maior que zero, o que é nossa hipótese.
+
+Simetricamente para (ii) tem-se que $\rho(X,Y)=Corr(X,Y) >0$.
+
+Por definição, $Corr(X,X) \leq 1$, como demonstra-se na Inequação de Schwarz (Página 216 DeGroot).
+
+Assim, a afirmação é verdadeira $\square$.
+
+# Questão 2
+
+## Questão 2A
+### (i)
+A e B são multualmente exclusivos, logo, $A \cap B = \emptyset$, assim temos:
+
+$$P(A \cup B \cup C) = P(A) + P(B) + P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap  C)$$
+
+$$P(A) = P(A \cup B \cup C) - P(B) + P(C \cap C^{c})$$
+
+### (ii)
+A e C são independentes, logo $P(A|C)=P(A)$
+
+$$P(A \cap C) = P(A)P(C)$$
+
+$$P(A) = \frac{P(A \cap C)}{P(C)}$$
+Também é verdade que $P(A \cap C)=P(C)P(A)$, tem-se que também é verdadeira a solução abaixo:
+
+$$P(A \cup B \cup C) = P(A) + P(B) + P(C) - P(A \cap B) - P(C)P(A) - P(B \cap C) + P(P(A \cap B \cap  C))$$
+
+$$P(A \cup B \cup C) = P(A) (1-P(C)) + P(B) + P(C) - P(A \cap B) - P(B \cap C) + P(A \cap B \cap  C)$$
+
+$$P(A \cup B \cup C) - P(B) - P(C) + P(A \cap B) + P(B \cap C) - P(A \cap B \cap  C)) = P(A) (1-P(C))$$
+
+$$\frac{P(A \cup B \cup C) - P(B) - P(C) + P(A \cap B) + P(B \cap C) - P(A \cap B \cap  C))}{1-P(C)} = P(A)$$
+
+### (iii)
+
+Se B e C são independentes, tem-se que $P(B \cap C)=P(B)P(C)$
+
+$$P(A \cup B \cup C) = P(A) + P(B) + P(C) - P(A \cap B) - P(A \cap C) - P(B)P(C) + P(A \cap B \cap  C)$$
+
+$$P(A) = P(A \cup B \cup C) - P(B) - P(C) + P(A \cap B) + P(A \cap C) + P(B)P(C) - P(A \cap B \cap  C)$$
+
+### (iv) 
+Tem-se que $4P(A) = 2P(B) - P(C)$ então podemos escrever a probabilidade como:
+
+$$P(A) = P(A \cup B \cup C) - 2P(A) - 4P(A) + P(A \cap B) + P(A \cap C) + P(B \cap C) - P(A \cap B \cap  C)$$
+
+
+$$P(A)= \frac{1}{7}\Big[P(A \cup B \cup C) + P(A \cap B) + P(A \cap C) + P(B \cap C) - P(A \cap B \cap  C)\Big]$$
+
+### (v)
+Se tem-se que $P(A \cup B \cup C)= 5P(A)$, a probabilidade de A equivale a expressão abaixo:
+
+Tem-se que $4P(A) = 2P(B) - P(C)$ então podemos escrever a probabilidade como:
+
+
+$$5P(A) = P(A) + P(B) + P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap  C)$$
+
+$$P(A) = \frac{1}{4} \Big[P(B) + P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap  C)\Big]$$
+
+Se todas valem, então tem-se:
+
+$$P(A \cup B \cup C) = P(A) + P(B) + P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap  C)$$
+$$P(A \cup B \cup C) = P(A) + 2P(A) + 4P(A) - P(A)4P(A) - 2P(A)4P(A)$$
+$$5P(A) = P(A) + 2P(A) + 4P(A) - P(A)4P(A) - 2P(A)4P(A)$$
+$$0 = 2P(A) - 12P(A)^{2} \implies 2 = 12P(A) \implies P(A)= \frac{1}{6}$$
+
+## Questão 2B
+### (i)
+Se os eventos são independentes $P(A \cap B) = P(A)P(B)$, assim temos:
+
+$$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
+
+$$P(A \cup B) = P(A) + P(B) - P(A)P(B)$$
+
+Portanto, a afirmação é falsa $\square$.
+
+### (ii)
+
+$$P(A \cap B \cap C) =P(A) P(B) P(C)$$
+$$P(A \cup B \cup C) = P(A) +P(B) + P(C) - P(A \cap B) -P(A \cap C) - P(C \cap B) + P(A \cap B \cap C)$$
+$$P(A \cup B \cup C) = P(A) +P(B) + P(C) - P(A \cap B) -P(A \cap C) - P(C \cap B) + P(A) P(B) P(C)$$
+
+Portanto é falso.
+
+### (iii)
+$$P(A|B)= \frac{P(A \cap B)}{P(B)}$$
+Se temos que $P(A|B) = 0,2$ e $P(B) = 0,8$ tem-se:
+$$P(A|B)P(B)= P(A \cap B)$$
+$$P(A \cap B)= P(A|B)P(B)$$
+$$P(A \cap B)= 0,16$$
+
+Como $P(A) = 0,4$, tem-se:
+$$P(B|A)= \frac{P(A \cap B)}{P(A)}$$
+$$P(B|A)= 0,4$$
+É verdadeiro.
+
+### (iv) 
+$$P(A \cap B)= P(A|B) P(B)$$
+Dados os valores, tem-se $P(A \cap B)= 0,12$, logo tem-se
+
+$$P(A^{c} \cup B^{c})= P(A \cup B) - P(A \cap B)$$
+
+$$P(A^{c} \cup B^{c})= 1 - P(A \cap B)$$
+
+$$P(A^{c} \cup B^{c})=0,88$$
+É verdadeiro.
+
+# Questão 3
+ Se tem-se uma v.a. X com a seguinte função de densidade de probabilidade:
+ $$f(x) = \left\{\begin{matrix}
+2(1-x), \;\; 0<x<1\\ 
+0, \;\; c.c.
+\end{matrix}\right.$$
+
+Com $Y=6X+10$, a variância de Y é determinada pela seguinte relação, se temos a e b como cosntantes, vale que $Var(aX +b)= a^{2}Var(X)$ (Prova em DeGroot página 198).
+
+Portanto, temos que $Var(Y)= 36Var(X)$  assim, calcula-se a variância de X:
+
+$$Var(x) = \int_{-\infty}^{\infty} (x - \mu_{x})^{2} f(x)dx$$
+$$Var(x) = \int_{-\infty}^{0} (x - \mu_{x})^{2} f(x)dx + \int_{0}^{1} (x - \mu_{x})^{2} f(x)dx + \int_{1}^{\infty} (x - \mu_{x})^{2} f(x)dx$$
+$$Var(x) = \int_{0}^{1} (x - \mu_{x})^{2} 2(1-x)dx $$
+$$\mathbf{E}(x) = \mu_{x} = \int_{-\infty}^{\infty} xf(x)dx$$
+$$\mathbf{E}(x) = \int_{-\infty}^{0} xf(x)dx + \int_{0}^{1} xf(x)dx + \int_{1}^{\infty} xf(x)dx$$
+
+$$\mathbf{E}(x) = 2\int_{0}^{1} x(1-x)dx \implies \mathbf{E}(x) = 2\int_{0}^{1} x - x^{2}dx$$
+$$\mathbf{E}(x) = 2\Big(\int_{0}^{1} xdx - \int_{0}^{1} x^{2}dx\Big)$$
+
+$$\mathbf{E}(x) = 2\Big( \frac{x^{2}}{2}\Big|^{1}_{0} - \frac{x^{3}}{3}\Big|^{1}_{0}\Big) \implies \mathbf{E}(x)= \frac{1}{3}$$
+
+$$Var(x) = 2\int_{0}^{1} \Big(x - \frac{1}{3}\Big)^{2} (1-x)dx$$
+$$Var(x) = 2\int_{0}^{1} \Big(x - \frac{1}{3}\Big)\Big(x - \frac{1}{3}\Big) (1-x)dx$$
+$$Var(x) = 2\int_{0}^{1} \Big(x - \frac{1}{3}\Big)\Big(x - \frac{1}{3}\Big) (1-x)dx$$
+$$Var(x) = \int_{0}^{1} \Big(x^{2} - \frac{2x}{3} + \frac{1}{9}\Big) (1-x)dx$$
+$$Var(x) = \int_{0}^{1} x^{2} - \frac{2x}{3} + \frac{1}{9} - x^{3} + \frac{2x^{2}}{3} - \frac{x}{9} dx$$
+
+$$Var(x) = \frac{1}{18}$$
+$$Var(Y) = 2$$
+
+# Questão 4
+## Questão 4A
+Temos que um parâmetro $\lambda$  não é viesado quando $\mathbf{E}(\hat{\lambda})= \lambda$, assim decompomos os parâmetros para avaliá-los:
+
+$$\bar{X}_{1}= \frac{\sum^{n_{1}}_{i=1} X_{1_{i}}}{n_{1}}$$
+
+E simetricamente para $X_{2}$, assim, tem-se:
+
+$$\bar{X}_{1} + \bar{X}_{2}= \frac{\sum^{n_{1}}_{i=1} X_{1_{i}}}{n_{1}} + \frac{\sum^{n_{2}}_{i=1} X_{2_{i}}}{n_{2}}$$
+$$\tilde{\mu}=\frac{\bar{X}_{1} + \bar{X}_{2}}{2}= \frac{\sum^{n_{1}}_{i=1} X_{1_{i}}}{2n_{1}} + \frac{\sum^{n_{2}}_{i=1} X_{2_{i}}}{2n_{2}}$$
+Como $n_{1}\bar{X_{1}} =\frac{\sum^{n_{1}}_{i=1} X_{1_{i}}}{n_{1}}$ e simetricamente para $X_{2}$, tem-se:
+
+$$\hat{\mu}=\frac{n_{1}\bar{X}_{1} + n_{2}\bar{X}_{2}}{n_{1}+n_{2}}= \frac{\sum^{n_{1}}_{i=1} X_{1_{i}} + \sum^{n_{2}}_{i=1} X_{2_{i}}}{n_{1}+n_{2}}$$
+Se temos que $E(\tilde{\mu}) = \tilde{\mu}$ e $E(\hat{\mu})=\hat{\mu}$, devemos checar a esperança  verdadeira, que seria:
+
+$$\mu= \frac{\sum^{n}_{j=1} X_{j}}{n}$$
+
+Como $n=n_{1}+n_{2}$ e sabemos também que $\sum^{n}_{j=1} X_{j}= \sum^{n_{1}}_{i=1} X_{1_{i}} + \sum^{n_{2}}_{i=1} X_{2_{i}}$ para $j=\{1,2\}$, temos que $\mu= \frac{\sum^{n_{1}}_{i=1} X_{1_{i}} + \sum^{n_{2}}_{i=1} X_{2_{i}}}{n_{1}+n_{2}}$. Assim o estimador para média populacional $\tilde{\mu}$ é não viesado para $n_{1}=n_{2}=1$ enquanto $\hat{\mu}$ é não viesado para todo tamanho das amostras.
+
+## Questão 4B
+
+Para calcular a eficiência refativa, temos:
+
+$$EFR= \frac{EQM(\tilde{\mu})}{EQM(\hat{\mu})}$$
+
+Como $EQM = [E(\bar{\theta}- \theta)]^{2} + Var(\theta)$, tem-se:
+
+$$Var(\tilde{\mu})= \frac{1}{4} 2\sigma^{2} \implies \frac{1}{2} \sigma^{2}$$
+$$Var(\hat{\mu})= \frac{n_{1}^{2}}{(n_{1}+n_{2})^{2}} Var(\bar{X}) + \frac{n_{2}^{2}}{(n_{1}+n_{2})^{2}} Var(\bar{X}) $$
+$$EFR= \frac{(n_{1}+n_{2})^{2}}{8(n_{1}^{2}+n_{2}^{2})}$$
+
+## Questão 4C
+Para saber se $\tilde{\mu}$ é consistente para a média populacional, deve-se observar se o limite da diferença modal entre ele e a média verdadeira é zero para uma amostra indo ao infinito.
+
+Sabendo que $EQM= \frac{\sigma^{2}}{n}$, $\underset{n \rightarrow \infty}{lim} EQM = 0$ ele é consistente.
+
+# Questão 5
+Se temos que  o estimador é dado por $\hat{\lambda}= \frac{1}{\hat{X}}$, pela condição de esperança de uma constante:
+
+$$\mathbf{E}(\hat{\lambda})= \frac{n}{\sum^{n}_{j=1} X_{j}}$$
+Como temos que para uma distribuição exponencial com parâmetro $\beta$, tem-se a f.d.p.:
+
+$$f(t,\beta)=  \left\{\begin{matrix}
+\frac{1}{\beta}e^{\frac{-t}{\beta}}, t \geq 0\\ 
+0, \;\; c.c.
+\end{matrix}\right.$$
+
+
+Pela integração por partes, sabe-se que $\mathbf{E}(T)=\beta$, logo se definimos $\lambda= \frac{1}{\beta} \implies \lambda= \frac{1}{E(T)}$, sendo $T=X$, temos que 
+
+$$\lambda= \frac{n}{\sum^{n}_{j=1} X_{j}}$$
+Logo o estimador é não viesado, condição para ser eficiente.
+
+E por fim, para ser eficiente deve ter a menor variância para todos os estimadores não viesados.
+
+Assim, é eficiente.
+
+# Questão 6
+## Questão 6A
+Se temos a afirmação $\mathbf{E}(Y|X)=0 \implies  \mathbf{E}(Y)=0$, pode-se julgá-la da seguinte forma:
+
+Sabe que $\mathbf{E}(\mathbf{E}(Y|X)) = \mathbf{E}(Y)$ - como já foi demonstrado- logo tem-se:
+
+$$\mathbf{E}(\mathbf{E}(Y|X)) = \int_{-\infty}^{\infty} \; \mathbf{E}(Y|X =x) \;  dF_{X}(x)$$
+Se $\mathbf{E}(Y|X)=0 \implies \mathbf{E}(\mathbf{E}(Y|X)) = 0 \implies \mathbf{E}(Y)=0$.
+
+## Questão 6B
+Se temos a afirmação $\mathbf{E}(Y|X)=0 \implies  Cov(Y|X)=0$, segue-se que:
+$$Cov(X,Y)= \mathbf{E}(XY) - \mathbf{E}(Y)\mathbf{E}(X)$$
+Como demonstrado se $\mathbf{E}(Y|X)=0 \implies  \mathbf{E}(Y)=0$, logo:
+
+$$\mathbf{E}(XY) = \mathbf{E}(X\mathbf{E}(Y|X))$$ (Prova em Probabilidade E Variáveis Aleatórias - Marcos Nascimento Magalhães - página 262)
+
+Se $\mathbf{E}(XY) = \mathbf{E}(X*0) \implies \mathbf{E}(XY)=0$ já que a esperança de uma constante é ela mesma.
+
+Se $\mathbf{E}(XY)=0 \land \mathbf{E}(Y)=0 \implies Cov(X,Y)=0$
+
+## Questão 6C
+Tem-se que $Y = \frac{X- \mu_{x}}{\sigma_{x}} \implies Y \sigma_{x}= X- \mu_{x}$, logo:
+
+$$Cov(X,Y) = \mathbf{E}(Y^{2}\sigma_{x} - \mathbf{E}(Y) \sigma_{x}\mu_{y})$$
+$$Cov(X,Y) = \sigma_{x}(\mathbf{E}(Y^{2}) - \mathbf{E}(Y)^{2})$$
+$$Cov(X,Y) = \sigma_{x}\sigma_{y}^{2}$$
+$$\rho(X,Y) = \frac{Cov(X,Y)}{\sigma_{x}\sigma_{y}} \implies \rho(X,Y) = \frac{\sigma_{x}\sigma_{y}^{2}}{\sigma_{x}\sigma_{y}}$$
+$$\rho(X,Y) = \sigma_{y}$$
+
+Como $-1 \leq \rho(X,Y) \leq 1$ e $\sigma_{y} > 0$ $\therefore 0 < \sigma_{y} \leq 1$.
+
+$$\sigma_{y} = \sqrt{Var(Y)}$$
+
+$$Var(Y) = \mathbf{E}(Y^2) - \mathbf{E}(Y)^2$$
+$$\sigma_{x} = \sqrt{\mathbf{E}(X^2) - \mathbf{E}(X)^2}$$
+
+$$\mathbf{E}(Y) = \mathbf{E}\Big(\frac{X-\mu_{x}}{\sigma_{x}}\Big)$$
+
+$$\mathbf{E}(Y) = \frac{1}{\sigma_{x}}\mathbf{E}(X) - \frac{1}{\sigma_{x}}\mu_{x}$$
+
+$$\mathbf{E}(X) = \mu_{x}$$
+
+$$\mathbf{E}(Y) = \frac{1}{\sigma_{x}}\mathbf{E}(X) - \frac{1}{\sigma_{x}}\mathbf{E}(x)$$
+
+$$\mathbf{E}(Y) = 0$$
+
+$$Var(Y) = \mathbf{E}(Y^2) \implies \sigma_{y} = \sqrt{\mathbf{E}(Y^2)}$$
+
+$$Y = \frac{X - \mu_{x}}{\sigma_{x}}$$
+
+$$Y^2 = \Big(\frac{X - \mu_{x}}{\sigma_{x}}\Big)^2 \implies \mathbf{E}\Big[\Big(\frac{X - \mu_{x}}{\sigma_{x}}\Big)^2\Big] = \mathbf{E}(Y^2)$$
+
+$$\mathbf{E}\Big[\Big(\frac{X^2}{\sigma_{x}^2} - \frac{2\mu_{x}X}{\sigma_{x}^2} + \frac{\mu_{x}^2}{\sigma_{x}^2}\Big)\Big] = \mathbf{E}(Y^2)$$
+$$\frac{1}{\sigma_{x}^2} \mathbf{E}(X^2) - \frac{2\mu_{x}}{\sigma_{x}^2} \mathbf{E}(X) + \frac{\mu_{x}^2}{\sigma_{x}^2} = \mathbf{E}(Y^2)$$
+
+$$\frac{1}{\sigma_{x}^2} \mathbf{E}(X^2) - \frac{2}{\sigma_{x}^2} + \frac{\mathbf{E}(X^2)}{\sigma_{x}^2} = \mathbf{E}(Y^2)$$
+
+$$\frac{\mathbf{E}(X^2)}{\sigma_{x}^2} - \frac{\mathbf{E}(X)^2}{\sigma_{x}^2} = \mathbf{E}(Y^2)$$
+$$\frac{1}{\sigma_{x}^2}[\mathbf{E}(X^2)-\mathbf{E}(X)^2] = \mathbf{E}(Y^2)$$
+
+$$\sigma_{x}^2 = \mathbf{E}(X^2)-\mathbf{E}(X)^2$$
+
+$$\mathbf{E}(Y^2) = 1$$
+
+$$\implies \sigma_{y} = \sqrt{\mathbf{E}(Y^2)} \implies \sigma_{y} = \sqrt{1}$$
+
+$$\sigma_{y} = 1$$
+
+# Questão 7
+Para uma f.d.p. exponencial, esta é definida como:
+
+$$f(t,\beta)=  \left\{\begin{matrix}
+\frac{1}{\beta}e^{\frac{-t}{\beta}}, t \geq 0\\ 
+0, \;\; c.c.
+\end{matrix}\right.$$
+
+No cenário, temos $n=100$ para o número de lâmpadas e estas possuem média $\mu= 5 hr$, o tempo de vida de cada uma delas é dado por uma distribuição exponencial em que t=0 se troca a lâmpada, devemos encontrar $\mathbf{P}(t \geq 525)$.
+
+Se temos que $\mathbf{E}(T) = \beta$, sabemos que $\mathbf{E}(T) = 5 \implies \beta=5$, logo temos:
+
+$$f(t,5)=  \left\{\begin{matrix}
+\frac{1}{5}e^{\frac{-t}{5}}, t \geq 0\\ 
+0, \;\; c.c.
+\end{matrix}\right.$$
+Para $n=100$, temos que $\mathbf(E) ( \sum^{100}_{i=1}E(u))= 500$, logo temos:
+
+$$\mathbf{P}(t \geq 525) = \mathbf{P}(t > 525)  = \int^{\infty}_{525} \frac{1}{500}e^{\frac{-t}{500}} dt$$
+$$\mathbf{P}(t \geq 525) = \mathbf{P}(t > 525)  = 0,34993$$
+
+# Questão 8
+## Questão 8A
+Sejam $\{X_{n} :  n \geq 1\}$ v.a. i.i.d. com esperança $\mu$ e variância $\sigma^{2}$ com $0 < \sigma^{2} < \infty$ então para $S_{n} = X_{1} + X_{2} + ... + X_{n}$, temos:
+
+$$\frac{S_{n} - n \mu}{\sigma \sqrt{n}} \rightarrow^{d} N(0,1)$$
+
+## Questão 8B
+Sejam $X_{1}, X_{2}, ..., X_{n}$ v.a. com esperanças finitas e seja $S_{n}= S_{n} = X_{1} + X_{2} + ... + X_{n}$. A sequeência  $\{X_{n} :  n \geq 1\}$ satisfaz a Lei Fraca dos Grandes números se
+
+$$\frac{S_{n}}{n} - \mathbf{E}(\frac{S_{n}}{n}) \rightarrow^{p} 0$$
+
+E a Lei Forte dos Grandes Números é dada por:
+$$\frac{S_{n}}{n} - \mathbf{E}(\frac{S_{n}}{n}) \rightarrow^{q_{c}} 0$$
+
+# Questão 9
+
+$$f(x) = \left\{\begin{matrix}
+C(x+2y), \;\; 0<y<1;0<x<2\\ 
+0, \;\; c.c.
+\end{matrix}\right.$$
+
+## Questão 9A
+
+$$\int_{0}^{1}\int_{0}^{2} C(x+2y)dxdy = 1$$
+$$C\int_{0}^{1}\int_{0}^{2} (x+2y) dxdy = 1$$
+$$\int_{0}^{1}\int_{0}^{2} \Big(\frac{x^2}{2} + x\Big) dy = 1$$
+$$C\Big(\frac{x^{2}}{2}y + xy^2\Big|^{1}_{0}\Big|^{2}_{0}\Big) = 1$$
+$$C\Big(\frac{2}{2}\cdot1 + 2\cdot1\Big) = 1$$
+$$4C = 1 \implies C = \frac{1}{4}$$
+
+## Questão 9B
+
+$$f_{x}(x) = \int_{-\infty}^{\infty} f_{xy}(x,y)dy$$
+$$f_{y}(y) = \int_{-\infty}^{\infty} f_{xy}(x,y)dx$$
+$$f_{y}(y) = \int_{0}^{2} \frac{1}{4}(x+2y)dx$$
+$$f_{y}(y) = \frac{1}{4}\Big[\Big(\int_{0}^{2} xdx\Big) + \Big(\int_{0}^{2} ydy\Big) \Big]$$
+$$f_{y}(y) = \frac{1}{4}\Big[\Big(\frac{x^2}{2}\Big)\Big|_{0}^{2} + \Big(xy\Big)\Big|_{0}^{2} \Big]$$
+
+$$f_{y}(y) = \frac{1}{4}\Big(\frac{4}{2} + 2y\Big)$$
+$$f_{y}(y) = \frac{1}{2} + y$$
+$$f_{x}(x) = \int_{-\infty}^{\infty} f_{xy}(x,y)dy$$
+
+$$f_{x}(x) = \frac{1}{4}\int_{0}^{1}(x+2y)dy$$
+$$f_{x}(x) = \frac{1}{4}\Big[\Big(\int_{0}^{1} xdy\Big) + \Big(\int_{0}^{1} 2ydy\Big) \Big]$$
+$$f_{y}(y) = \frac{1}{4}\Big[\Big(xy\Big)\Big|_{0}^{1} + \Big(y^2\Big)\Big|_{0}^{1} \Big]$$
+
+$$f_{y}(y) = \frac{1}{4}\Big(x + y\Big) \implies f_{x}(x) = \frac{x}{4} + \frac{1}{4}$$
+$$\frac{f(y|x)}{y|x} = \frac{f_{xy}(xy)}{f_{x}(x)}$$
+$$\frac{f(y|x)}{y|x} = \Big(\frac{x}{4} + \frac{2y}{4}\Big) \cdot \frac{4}{x+1}$$
+$$\frac{f(y|x)}{y|x} = \frac{x+2y}{x+1}$$
+
+## Questão 9C
+
+$$\mathbf{E}(Y) = \int_{-\infty}^{\infty} y f(y)dy$$
+$$\mathbf{E}(Y) = \int_{-\infty}^{0} y f(y)dy + \int_{0}^{2} y f(y)dy + \int_{2}^{\infty} y f(y)dy$$
+$$\mathbf{E}(Y) = \int_{0}^{1} y \Big(\frac{1}{2}+y\Big)dy$$
+$$\mathbf{E}(Y) = \Big(\int_{0}^{1} \frac{y}{2}dy\Big) + \Big(\int_{0}^{1} y^2dy\Big)$$
+$$\mathbf{E}(Y) = \Big(\frac{y^2}{4}\Big|_{0}^{1}\Big) + \Big(\frac{y^3}{3}\Big|_{0}^{1}\Big)$$
+$$\mathbf{E}(Y) = \frac{7}{12}$$
+$$\mathbf{E}(Y|X) = \int_{-\infty}^{\infty} y f_{yx}(y|x)dy$$
+$$\mathbf{E}(Y|X) = \int_{-\infty}^{0} y f_{yx}(y|x)dy + \int_{0}^{1} y f_{yx}(y|x)dy + \int_{1}^{\infty} y f_{yx}(y|x)dy$$
+$$\mathbf{E}(Y|X) = \int_{0}^{1} y \Big(\frac{x+2y}{x+1}\Big)dy$$
+$$\mathbf{E}(Y|X) = \int_{0}^{1} \frac{xy+2y^2}{x+1}dy$$
+$$\mathbf{E}(Y|X) = \int_{0}^{1} \Big(\frac{xy}{x+1} + \frac{2y^2}{x+1}\Big)dy$$
+$$\mathbf{E}(Y|X) = \int_{0}^{1} \frac{xy}{x+1}dy + \int_{0}^{1}\frac{2y^2}{x+1}dy$$
+$$\mathbf{E}(Y|X) = \frac{x}{x+1}\Big(\int_{0}^{1}ydy\Big) + \frac{2}{x+1}\Big(\int_{0}^{1}y^2dy\Big)$$
+$$\mathbf{E}(Y|X) = \frac{x}{x+1}\Big(\frac{y^2}{2}\Big)\Big|_{0}^{1} + \frac{2}{x+1}\Big(\frac{y^3}{3}\Big)\Big|_{0}^{1}$$
+$$\mathbf{E}(Y|X) = \frac{x}{x+1} \cdot \frac{1}{2} + \frac{2}{x+1}\cdot\frac{1}{3}$$
+$$\mathbf{E}(Y|X) = \frac{x}{2(x+1)} + \frac{2}{3(x+1)}$$
+$$\mathbf{E}(Y|X) = \frac{3x+4}{6x+6}$$
+$\mathbf{E}(\mathbf{E}(Y|X)) = \mathbf{E}(Y)$, como já foi provado, logo, tem-se:
+
+
+$$\mathbf{E}(Y) = \frac{7}{12} \implies \mathbf{E}(\mathbf{E}(Y|X)) = \frac{7}{12}$$
+
+## Questão 9D
+
+### (i)
+Independência plena.
+Independência plena ou estrita existe para duas v.a. $X$ e $Y$ se $f(x,y) = f(x,y) \forall x,y$. Assim $f(y|x) = f(x)$ e $f(x|y) = f(x)$.
+
+### (ii)
+Independência em média condicional existe para duas v.a. $X$ e $Y$ se $\mathbf{E}(y|x) = \mathbf{E}(y) = \mu_{y} \forall x$.
+
+### (iii)
+Independência linear, a mais fraca das independências, é quando para $X$ e $Y$, duas v.a., $Cov(x,y) = 0 \implies Cor(x,y) = 0$.

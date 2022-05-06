@@ -1,0 +1,108 @@
+---
+title: "Quiz 2"
+author: "Maria Cruz e Guilherme Davi de Oliveira"
+date: "05/05/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Maria Cruz - 11766583
+Guilherme Oliveira - 11239070
+
+```{r}
+#0. Configuração ------------------------------------------------------
+xfun::pkg_attach(c('tidyr', 'dplyr', 'wooldridge','readr','stargazer','fixest'), 
+                 install = T)
+
+```
+
+## Questão 1
+
+### 1.a)
+
+A equação de relação é dada por $bwght =\beta_{0} +  \beta_{1}cigs + \beta_{2}faminc +u$
+
+ Sabemos que $\beta_{2}$ é o impacto da renda da família sobre o peso do bebê, quando uma família possui mais renda, a nutrição da mãe é melhor e portanto a nutrição do bebê, tudo mais constante, é melhor, logo sinal provavelmente é positivo.
+
+### 1.b)
+É possível que exista uma correlação, existem evidências de que pessoas com maiores níveis de renda têm menos impacto sobre fatores comportamentais de saúde (NT Vigitel IEPS), então é possível que pessoas mais ricas possam ter mais informações e fumar menos, essa correlação seria então negativa. Mas pode existir uma hipótese de que cigarro seria um bem não essencial e pessoas com menos renda não consumiriam, uma relação positiva, o que pelas evidências não parece ser o caso.
+
+### 1. c) Com lm:
+```{r}
+# Importando base de dados questão 1
+dados1 <- wooldridge::bwght
+
+model_1 <- lm(dados1$bwght ~ dados1$cigs)
+model_2 <- lm(dados1$bwght ~ dados1$cigs + dados1$faminc)
+
+coef(model_1)
+coef(model_2)
+```
+
+Com fixest::feols:
+
+```{r}
+model1 <- feols(bwght ~ cigs, dados1)
+model2 <- feols(bwght ~ cigs + faminc, dados1)
+
+etable(model1)
+etable(model2)
+```
+
+Para a regressão simples, temos 1.388 observações, $\beta_{0} = 119.8, \beta{1}= -0.5138$ e o R-quadrado é 0.02273 e para a regressão múltipla, o número de observações é 1,388, tem-se  $\beta_{0} = 117.0, \beta{1}= -0.4634, \beta_{2}=  0.0928$ e o R-quadrado é 0.02981.
+
+
+### 1. d) 
+
+O coeficiente do impacto de tabagismo aumenta quando incluímos a variável de renda. A diferença é pequena porque o impacto de renda no peso do bebê é pequeno e essa variável pouco interfere no efeito negativo de tabagismo para o peso do bebê, além disso a correlação de renda e tabagismo deve ser pequena para que se retire tão pouco do efeito de tabagismo.
+
+## Questão 2
+### 2. a)
+
+```{r}
+dados2 <- wooldridge::discrim
+
+media_prpblck <- mean(dados2$prpblck, na.rm = T)
+desvio_prpblck <- sd(dados2$prpblck, na.rm = T)
+
+media_renda <- mean(dados2$income, na.rm = T)
+desvio_renda <- sd(dados2$income, na.rm = T)
+
+print(media_prpblck)
+print(desvio_prpblck)
+
+print(media_renda)
+print(desvio_renda)
+```
+
+
+### 2. b)
+```{r}
+modelo <- feols(psoda ~ prpblck + income, dados2)
+
+etable(modelo)
+```
+$\beta_{0}$ é 0.9563, $\beta_{1}$ é 0.1150 e $\beta_{2}$ é 1.6e-6. A proporção da população negra em um distrito aumenta o preço do refrigerante, na média, em 0.1150.
+
+### 2. c)
+```{r}
+
+modelo_2 <- feols(psoda ~ prpblck, dados2)
+
+etable(modelo_2)
+```
+O efeito quando controlamos por renda era maior, o que indica que, como há uma correlação entre a renda dos distritos e a proporção negra da população dos distritos, quando fazemos uma regressão apenas por prpblck, o efeito da renda sobre o preço é capturado por essa variável (quando a renda é menor, o preço normalmente é menor por conta da disponibilidade a pagar). Já quando fazemos um modelo controlado por renda, o efeito da proporção de pessoas negras é maior, então o viés da variável de renda na RLS "variável omitida" era negativo.
+
+### 2. d)
+
+```{r}
+aumento_esperado <- desvio_prpblck*0.1150
+
+aumento_esperado
+```
+O aumento esperado é de 0.0209778. Não é um aumento economicamente grande, dado que são dois centavos em dólares.
+
+

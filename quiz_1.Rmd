@@ -1,0 +1,108 @@
+---
+title: "Quiz 1"
+author: "Maria Cruz"
+date: "31/03/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#0. Configuração ------------------------------------------------------
+xfun::pkg_attach(c('tidyr', 'dplyr', 'wooldridge','readr','stargazer'), 
+                 install = T)
+
+#Input
+dados <-  'quiz1.csv'
+```
+
+## Quiz 1
+
+# Questão 1
+## A
+
+```{r}
+dados <- readr::read_csv(dados)
+```
+## B
+```{r}
+mu_brancas <- dados %>% 
+  dplyr::filter(race=='white')
+
+n_mu_brancas <- nrow(mu_brancas)
+
+perc <-(nrow(mu_brancas)/nrow(dados))
+
+print(perc)
+```
+
+A proporção de mulheres brancas é de aproximadamente $\frac{n_{mulheres_brancas}}{n_{total_mulheres}} = 0.7288513$
+
+
+
+
+
+## C
+```{r}
+dados %>% 
+  dplyr::select(age, wage, ttl_exp) %>%
+  as.data.frame() %>% 
+  stargazer(type = "text", title = "Análise das variáveis",
+            summary.stat = c("mean", "sd"))
+```
+
+## D
+```{r}
+var_salario <- var(dados$wage)
+var_idade <- var(dados$age)
+
+print(var_salario)
+print(var_idade)
+```
+
+A variância de salário é 33.12604 e a variância de idade 9.363614
+
+```{r}
+cov_salario_idade <- cov(dados$age,dados$wage)
+
+print(cov_salario_idade)
+```
+
+A covariância de salário e idade é -0.6369469
+
+## E
+```{r}
+hist(dados$wage, xlab = 'Salários', main = 'Distribuição de Salários', ylab = 'Frequência')
+
+```
+
+## F
+
+Temos que uma regressão simples linear é dada por $y= \beta_{0} + \beta_{1}x + u$, para isso deve-se encontrar os parâmetros $\hat{\beta_{0}}$ e $\hat{\beta_{1}}$, se temos como variável de interesse salários e variável de controle as notas, a regressão é dada por:
+
+$$wage= \beta_{0} + \beta_{1}grade + u$$
+```{r}
+lm_grades <- lm(wage ~ grade, data = dados)
+coef(lm_grades)
+
+delta_grade <- 1
+
+delta_wage=  0.7431729 * delta_grade
+
+print(delta_wage)
+```
+
+Como temos que $wage= -1.9658857    +  0.7431729* grade$ então com 1 ano de a mais de estudo, tem-se um salário maior em 0.7431729.
+
+## G
+```{r}
+races <- dados %>% 
+  distinct(race)
+
+lm_race <- lm(wage ~ race, dados)
+coef(lm_race)
+```
+
+O coeficiente de uma relação de raça com salários é 1.165598
