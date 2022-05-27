@@ -1,0 +1,164 @@
+---
+title: "Quiz 3"
+author: "Maria Cruz"
+date: "26/05/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Maria Cruz - 11766583
+
+## Exercício 1
+```{r}
+#0. Configuração ------------------------------------------------------
+xfun::pkg_attach(c('tidyr', 'dplyr', 'wooldridge','readr','stargazer','fixest'), 
+                 install = T)
+```
+
+```{r}
+dados1 <- wooldridge::discrim
+```
+
+
+#### 1.d) 
+
+```{r}
+modelo <- feols(lpsoda ~ prpblck + lincome, dados1)
+
+etable(modelo)
+
+```
+
+Temos que a regressão é dada por $\hat{lpsoda} = -0.7938 + 0.1216*prpblck + 0.0765*lincome$, se prpblck aumenta em 0,2, a variação em psoda é de 0.02432, a variação é de 2.432%
+
+```{r}
+prpblck <- 0.2
+lpsoda <-  0.1216*prpblck
+
+lpsoda
+lpsoda*100
+
+```
+
+
+
+#### 1.e)
+
+
+```{r}
+modelo <- feols(lpsoda ~ prpblck + lincome + prppov, dados1)
+
+etable(modelo)
+```
+ O estimador $\hat{\beta}_{1}$ no segundo modelo é de 0.0728, enquanto no primeiro era de 0.1216, ou seja diminuiu. O impacto da varíavel de proporção de pessoas negras diminui sobre o preço de refrigerante. Parte do efeito desse impacto estava sendo sobrestimado, confundindo-se com o impacto da proporção de pessoas pobres.
+
+#### 1.f)
+```{r}
+dados1_na <- dados1 %>% 
+  filter(is.na(lincome) == F & is.na(prppov) == F)
+
+corr_prov_renda <- cor(dados1_na$lincome, dados1_na$prppov)
+
+corr_prov_renda
+```
+
+A correlação é de -0.838467.
+
+
+#### 1.g)
+
+A correlação é grande, mas não é perfeita, se existe correlação entre as variaveis independentes e a dependente, e não existe dependencia com os erros, não existe um grande problema na correlação entre as variáveis, colocá-las na regressão com a modelagem correta permite separar seus efeitos.
+
+
+
+## Exercício 2
+
+```{r}
+dados2 <- wooldridge::nbasal
+```
+
+
+#### 2.a)
+
+```{r}
+modelo2 <- feols(points ~ exper + age + coll, dados2)
+
+etable(modelo2)
+
+modelo3 <- feols(points ~ exper + exper^2 + age + coll, dados2)
+
+etable(modelo3)
+```
+
+
+
+#### 2.b)
+
+Tendo a regressão como $E(points| exper, age, coll) = \beta_{0} + \beta_{1} exper +   \beta_{2} exper^{2}+ \beta_{3} age + \beta_{4} coll$ temos:
+
+$$\frac{\partial E(points| exper, age, coll)}{\partial exper} = \beta_{1} + 2\beta_{2}exper$$
+$$\beta_{1} + 2\beta_{2}exper= 0$$
+$$exper= \frac{-\beta_{1}}{2\beta_{2}}$$
+Se $\beta_{1}$ e $\beta_{2}$ tiverem o mesmo sinal, ou seja, ambos tiverem impacto positivo ou negativo, um ano a mais de experiência gera impacto negativo nos pontos. Entretanto, quando estimamos $\beta_{1} >0$ e $\beta_{2} <0$, assim, tem um impacto positivo.
+
+Se para o ponto de inflexão, a derivada da experiência for negativa, pode significar que a quantidade de pontos cairia, como mantemos idade fixa, é difícil imaginar que isso faça sentido, dado que seria plausível diminuir a produtividade em jogos caso o indivíduo passe a envelhecer.
+
+
+#### 2.c)
+
+```{r}
+modelo4 <- dados2 %>% 
+  feols(lwage ~ points + exper + exper^2 + age + coll)
+
+etable(modelo4)
+```
+
+O R-quadrado é de 0.48783 e o R-quadrado ajudtado é de 0.47810.
+
+O aumento marginal de um ano de experiência em salários é dado por:
+
+$$E(lwage| points, exper, age, coll) = \beta_{0} + \beta_{1} points+ \beta_{2} exper +   \beta_{3} exper^{2}+ \beta_{4} age + \beta_{5} coll$$
+
+$$\frac{\partial E(lwage| points, exper, age, coll)}{\partial exper} = \beta_{2} + 2\beta_{3}exper$$
+
+$$\beta_{2} + 2\beta_{3}exper= 0$$
+$$exper= \frac{-\beta_{2}}{2\beta_{3}}$$
+No caso do modelo estimado, o impacto seria positivo em salários.
+
+## Exercício 3
+
+```{r}
+dados3 <- wooldridge::wage2
+```
+
+
+#### 3.a)
+
+```{r}
+modelo5 <- dados3 %>% 
+  feols(lwage ~ educ + exper)
+
+etable(modelo5)
+```
+
+```{r}
+modelo6 <- dados3 %>% lm(lwage ~ educ + exper, data = .)
+                         
+summary(modelo6)$coefficients
+```
+
+Como o p-valor de $\beta_{1}$ é  $Pr(>|t|) = 3.615583e-30 < 0,05$ ele é significamente diferente de 0, rejeitamos a hipótese de que educação não tem nenhum impacto nos salários.
+
+#### 3.b)
+
+```{r}
+confint(modelo5)
+```
+O intervalo de confiança para $\beta_{1}$ é dado por $CI = [0.065,0.091]$
+
+
+
+

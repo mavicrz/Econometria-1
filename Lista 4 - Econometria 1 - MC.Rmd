@@ -1,0 +1,250 @@
+---
+title: "Lista 4"
+author: "Maria Vitória Cruz"
+date: "20 de maio de 2022"
+documentclass: article
+papersize: a4
+fontsize: 12pt
+linestretch: 1.5
+geometry: "left = 1.0in, right = 1.0in, top = 1.0in, bottom = 1.0in"
+indent: true
+output:
+  bookdown::pdf_document2:
+    toc: false
+    latex_engine: pdflatex
+    number_sections: true
+    extra_dependencies:
+      fontenc: ["T1"]
+      inputenc: ["utf8"]
+      babel: ["english, latin, brazil"]
+      lipsum: null
+      float: null
+      booktabs: null
+      threeparttable: null
+      array: null
+      graphicx: null
+      tabularx: null
+      adjustbox: null
+      amsmath: null
+      amssymb: null
+      amsthm: null
+header-includes:
+  - \usepackage{floatrow}
+  - \floatsetup[figure]{capposition=top}
+  - \floatsetup[table]{style=plaintop}
+  - \usepackage{hyperref}
+  - \hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue, filecolor=blue}
+---
+
+```{r setup, include=FALSE}
+xfun::pkg_attach(c('dplyr','tidyr','purrr','wooldridge','stargazer'), install = T)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Questão 1
+Temos as matrizes $P= X(X'X)^{-1}X'$ e $M= I- P$, onde I é a matriz identidade.
+
+## Questão 1A
+
+P e M são simétricas, se temos que $I = P + M$ e sabemos que a matriz identidade é simétrica dada por $I_{NxN}$, então é quadrada e para somar matrizes ambas tem de ter a mesma dimensão, logo $M_{KxK} + P_{KxK}$, então n=k. Além disso, se temos uma matriz identidade dada por:
+$$\begin{pmatrix}
+1 & ... & 0\\ 
+. &  & .\\ 
+. & . & .\\ 
+. &  & .\\ 
+0 & ... & 1
+\end{pmatrix}$$
+
+Para uma matriz P dada por:
+$$\begin{pmatrix}
+x_{11} & ... & x_{1k}\\ 
+. &  & .\\ 
+. & . & .\\ 
+. &  & .\\ 
+x_{k1} & ... & x_{kk} 
+\end{pmatrix}$$
+
+A matriz M deve ter transposta igual a ela mesma:
+$$M= \begin{pmatrix}
+1- x_{11} & ... & - x_{1k}\\ 
+. &  & .\\ 
+. & . & .\\ 
+. &  & .\\ 
+- x_{k1} & ... & 1-x_{kk} 
+\end{pmatrix}$$
+
+$$M^{T}= \begin{pmatrix}
+1- x_{11} & ... & - x_{k1}\\ 
+. &  & .\\ 
+. & . & .\\ 
+. &  & .\\ 
+- x_{1k} & ... & 1-x_{kk} 
+\end{pmatrix}$$
+
+Assim, se $x_{ij} = x_{ji}, \forall i \neq j$, a matriz M é simétrica.
+
+Se provarmos que P é simétrica, M será simétrica também.
+
+$$P= X(X'X)^{-1}X' \implies P^{T}= (X(X'X)^{-1}X')^{T} \implies  P^{T}= X(X(X'X)^{-1})^{T}$$
+
+$$((X'X)^{-1})^{T} = ((X'X)^{T})^{-1} \implies ((X'X)^{-1})^{T} = (X'X)^{-1}$$
+
+$$P^{T}= X(X(X'X)^{-1})^{T} \implies P^{T}= X(X'X)^{-1}X' = P$$
+Portanto, P é simétrica, logo M é simétrica também.
+
+## Questão 1B
+P é dada por  $P= X(X'X)^{-1}X'$, assim temos, $PxP = X(X'X)^{-1}X'X(X'X)^{-1}X'$.
+
+$$P= X(X'X)^{-1}X' \implies PxP = X(X'X)^{-1}X'X(X'X)^{-1}X' \implies PxP = XI(X'X)^{-1}X'$$
+
+$$PxP = X(X'X)^{-1}X' = P$$
+Sobre a matriz M, tem-se:
+
+$$M= I- P \implies M= I -  X(X'X)^{-1}X'$$
+
+$$MxM = I -  X(X'X)^{-1}X' (I -  X(X'X)^{-1}X')$$
+$$MxM = I -  IX(X'X)^{-1}X' - X(X'X)^{-1}X'I +  X(X'X)^{-1}X'X(X'X)^{-1}X'$$
+
+$$MxM = I -  X(X'X)^{-1}X' - X(X'X)^{-1}X' +  XI(X'X)^{-1}X'$$
+$$MxM = I -  X(X'X)^{-1}X' - X(X'X)^{-1}X' +  X(X'X)^{-1}X'$$
+
+$$MxM = I -  X(X'X)^{-1}X' = M$$
+Então, M e P são idempotentes.
+
+# Questão 2
+
+## Questão 2A
+
+Multicolinearidade é quando alguma das variáveis independentes é combinação linear de outra variável. Assim, a matriz de (X'X) é singular, ou seja, não é inversível.
+
+$$X= \begin{pmatrix}
+x_{11} & ... & x_{1k}\\ 
+x_{21} & ... & x_{2k}\\ 
+. & &.\\
+. & . & .\\
+. & & .\\
+ x_{n1} & ... & x_{nk}
+\end{pmatrix}$$
+
+Assim, se $v=x_{i} \land w=x_{j}, \;\; \forall i \neq j \land  \forall \;\; {1,...,k}$ e temos que $v= \alpha(w)$,  v é uma combinação de w, logo existe multicolinearidade.
+
+## Questão 2B
+
+ A hipótese de inexistência de multicolinearidade perfeita é necessária para que seja possível encontrar os estimadores da regressão, portanto sem esta os estimadores não são BLUE, pois não são possíveis de serem enocntrados. No caso de multicolinearidade imperfeita, as variáveis podem ser correlacionadas, mas provavelmente seriam redundantes, ainda assim seriam BLUE, desde que tenham correlação com a variável independente.
+
+## Questão 2C
+
+Colinearidade entre variáveis pode ocorrer quando variáveis independentes como renda da família e gasto com educação impactam notas, afinal essas variáveis independentes estão correlacionadas nas amostras, famílias com maior renda, em média, gastam mais com educação.
+
+## Questão 2D
+
+Quando temos multicolinearidade, as informações são parecidas e provavelmente redundantes, o conjunto informacional dessas variáveis não acrescenta muito quando comparado a somente uma delas. A multicolinearidade supõe que as variáveis tem nenhuma variância entre elas, portanto é possível comparar com baixa variabilidade de X numa amostra pequena, a variação de X é necessária para poder explicar o efeito na variável Y.
+
+# Questão 3
+Temos o modelo $y= X \beta + u$, supondo $E(uu'|X) = \Omega (X)$.
+
+## Questão 3A
+Se temos que $UU' = \sum^{N}_{i=1} u^{2}$ e a $E(\sum^{N}_{i=1} u^{2}|X) = \Omega (X)$, tem-se que $E(\sum^{N}_{i=1} u^{2}|X) \neq 0$, se $\Omega (X) \neq 0$.
+
+Portanto, para o caso contrário, os erros não são idependentes da variável explicativa, logo, não há exogeneidade e os estimadores são biased e não BLUE.
+
+## Questão 3B
+Não, pois não são BLUE.
+
+# Questão 4
+
+## Questão 4A
+
+## Questão 4B
+
+# Questão 5
+## Questão 5A
+
+## Questão 5B
+
+## Questão 5C
+
+## Questão 5D
+
+## Questão 5E
+
+# Questão 6
+## Questão 6A
+O parâmetro $\beta$ é dado por:
+$$\hat{\beta} = \frac{\sum^{n}_{i=1} (x_{i} - \bar{x})y_{i}}{\sum^{n}_{i=1} (x_{i} - \bar{x})^{2}}$$
+e a derivada é dada por:
+$$\frac{dy}{dx} = \beta$$
+e elasticidade:
+$$\frac{dy}{dx} \frac{x}{y} = \beta \frac{x}{y}$$
+
+## Questão 6B
+$$log(y_{i}) = \alpha + \beta log(x_{i}) + u_{i}$$
+$$E(log(y_{i})|X) = \alpha + \beta log(x_{i})$$
+
+## Questão 6C
+$$log(y_{i}) = \alpha + \beta x_{i} + u_{i}$$
+
+$$\hat{\beta} = \frac{\partial \;\hat{log \; y}}{\partial \; x}$$
+$$\frac{\partial \;\hat{log \; y}}{\partial \; x} = \frac{d \;\hat{log \; y}}{d \;\hat{y}} *\frac{d \;\hat{y}}{d \; x} $$
+$$\frac{\partial \;\hat{log \; y}}{\partial \; x} = \frac{\Delta \% \hat{y}}{\Delta x} $$
+
+## Questão 6D
+$$y_{i} = \alpha + \beta log(x_{i}) + u_{i}$$
+
+$$\frac{dy}{dx} = \beta \frac{1}{x_{i}}$$
+$$\frac{dy}{dx}\frac{x}{y} = \beta \frac{1}{y}$$
+
+## Questão 6E
+$$y_{i} = \alpha + \beta \frac{1}{x_{i}} + u_{i}$$
+
+$$\frac{dy}{dx} = -\beta \frac{1}{x_{i}^{2}}$$
+$$\frac{dy}{dx} \frac{x}{y}= -\beta \frac{y_{i}}{x_{i}}$$
+
+# Questão 7
+A regressão é dada por $y_{i}= \beta_{0} + \beta_{1}x_{1i} + \beta_{2}x_{2i} + ... + \beta_{k}x_{ki}+ u_{i}$ para $i= 1,...,n$.
+
+## Questão 7A
+$Cov(x_{1i},x_{3i}) \neq 0$ - Verdadeiro, existir covariância entre variáveis independentes implica que existe correlação entre as variáveis, o que  faz com que os estimadores sejam viesados.
+
+## Questão 7B
+Falso- Não é necessário que os erros sejam normalmente distribuídos.
+
+## Questão 7C
+A hipótese de que $Var(u_{i}|x_{1i},...,x_{ki}) =  \sigma^{2}$ 
+
+## Questão 7D
+Falso - teríamos o viés da variável omitida, existe um efeito que é contabilizado nos erros e se usarmos o modelo verdadeiro, exite viés nos estimadores.
+
+# Questão 8
+Tem-se o modelo $y_{i} = \beta_{0} + \beta_{1}x_{1i} + \beta_{2}x_{2i} + u_{i}$ para $i=1,...,n$, e a média condicional dos erros é zero para todos as variáveis independentes. $E(u_{i}|x_{1i},x_{2i}) = 0$.
+
+
+## Questão 8A
+A hipótese de exogeneidade é necessária para que o estimador $\beta_{1}$ seja consistente?
+
+## Questão 8B
+Se $Var(u_{i}|x_{1i},x_{2i}) = x_{1i}\sigma^{2}$
+
+## Questão 8C
+Falso, existir correlação entre $x_{1i}$ e $x_{2i}$s
+
+# Questão 9
+Temos a regressão dada por $log(salar) = 0.6 + 0.09genero + 0.08educ + 0.3exper - 0.03exper^{2}$ com R-quadrado = 0.36.
+
+## Questão 9A
+Quando temos uma mulher a variável dummy genero = 1, logo temos $log(salar) = 0.69 + 0.08educ + 0.3exper - 0.03exper^{2}$, enquanto temos um homem, a variável dummy = 0, logo $log(salar) = 0.60 + 0.08educ + 0.3exper - 0.03exper^{2}$.
+
+Assim, os interceptos serão diferentes e a reta de regressão será plotada com um diferencial de início.
+
+No entanto, captura-se o efeito da regressão toda, que é composta por educação e experiência, isolar esse efeito é olhar para o $\beta_{2} = 0.08$ que é igual para os gêneros.
+
+A fim de isolar, deve-se observar o modelo com a variável de educação como dummy para ter retas de regressão diferentes.
+
+## Questão 9B
+Sim, é possível, pois supomos que o modelo precisa ser linear somente nos parâmetros.
+
+## Questão 9C
+O retorno médio de um ano a mais de educação é de 0,8. O retorno médio da experiência não é de 3%.
+
+## Questão 9D
+O R-quadrado aumenta quando incluímos uma variável independente.
