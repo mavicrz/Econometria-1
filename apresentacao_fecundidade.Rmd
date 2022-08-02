@@ -1,0 +1,210 @@
+---
+title: "Fecundidade em São Paulo"
+author: "Guilherme Davi e Maria Cruz"
+institute: "FEA - USP"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+fontsize: 10pt
+output:
+  beamer_presentation:
+    theme: "Warsaw"
+csl: "refs/apa.csl"
+link-citations: true
+nocite: '@*'
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = F)
+
+xfun::pkg_attach(c('tidyverse', 'purrr', 'fixest', 'readxl'), install = T)
+
+# Input
+file_fec <- 'Trabalho/input/Tema 1 - Fecundidade em SP.xlsx'
+
+# 1. Tratar base ---------------------------------------------------------
+painel_fec <- readxl::read_xlsx(file_fec) %>%
+  dplyr::rename(race= 2) %>% 
+  dplyr::mutate(race = as.double(case_when(
+    race == 'indigena' ~ '0',
+    T ~ race)),
+    educ_cat = case_when(
+      educ < 4 ~ 0, # Fundamental 1 incompleto
+      educ %in% 5:8 ~ 1, # Fundamental 2 incompleto
+      educ %in% 9:11 ~ 2, # Ensino médio incompleto
+      educ  == 12 ~ 3, #Ensino médio completo
+      educ > 12 ~4 #Ensino superior
+      ),
+    salario_hora =  salariom/horasm,
+    idade_cat = case_when(
+      idade < 20 ~ 1, 
+      idade %in% 20:30 ~ 2,
+      idade >30 ~ 3
+    ),
+    riqueza = case_when(
+      salario_hora > 5.747126 ~ 1,
+      T ~ 0
+    ),
+    renda_cat = ntile(salario_hora, n = 5)
+    )
+
+painel_fec_rep <- painel_fec %>% 
+  dplyr::filter(idade %in% 15:49) %>% 
+  dplyr::mutate(renda_cat = factor(ntile(salario_hora, n = 5)))
+
+```
+
+# Introdução
+
+ - Analisar a fecundidade da cidade de São Paulo; 
+ - Fecundidade representa o potencial reprodutivo; 
+ - A taxa de fecundidade é o número médio de filhos por mulher em idade reprodutiva;
+ - Idade reprodutiva: 15 a 49 anos.
+
+
+# Dados
+
+- A base possui 8146 observações e 13 varáveis;
+- Indicadores pessoais: idade, raça;
+- Indicadores socioeconômicos: atuação no trabalho doméstico, carga horária, salário e educação;
+- Fecundidade: quantidade de filhos por mulher.
+
+# Dados
+
+- A faixa etária da base: 7 a 93 anos de idade;
+- Filtro para amostra com 15 a 49 anos;
+- Aspectos comportamentais e de saúde reprodutiva;
+- Base com amostra de mulheres em idade reprodutiva: 6465 observações.
+
+# Literatura
+
+- Pesquisa Nacional de Demografia e Saúde (PNDS): entre 1996 e 2006 para o Brasil, os níveis de fecundidade diminuiram em média;
+- Transição da fecundidade: inserção feminina no mercado de trabalho, maior acesso a educação, maior taxa de urbanização, maior acesso a contraceptivos;
+- Becker (1991): maximizar o número de crianças dado o valor;
+- Black (2008): crianças como bens normais: mais renda aumenta fecundidade;
+- Ponczek and Souza (2012): qualidade vs. número de crianças no Brasil;
+
+# Motivação
+
+- Maior escolaridade implica que mulheres tem menos filhos - seja por condições biológicas ou seja por escolha?
+- Maior renda tem a mesma relação que escolaridade?
+
+# Regressão simples
+ 
+ - Estimar regressões com variáveis contínuas separadas;
+ - Estimar regressões com as variáveis conjuntas;
+ - Entender as diferenças dos modelos.
+
+# Formas funcionais
+- Salário por hora (somente dividindo salário mensal por total de horas de trabalho mensal);
+- Educação: Fudamental 1 Incompleto; Fundamental 2 Incompleto; Ensino Médio Incompleto; Ensino Médio Completo e Ensino Superior;
+- Renda: Renda na distribuição (5 divisões nos quantis);
+- Desigualdade econômica: Variável binária de salário por hora;
+
+# Formas funcionais
+
+$$\text{Quantidade de filhos} = \beta_{0} + \sum^{n=4}_{i=1} \beta_{i} educ_{i} + u$$
+
+
+
+$$\text{Quantidade de filhos} = \beta_{0} + \beta_{1} log(\text{Salário por hora}) + u$$
+
+
+$$\small\text{Quantidade de filhos} = \beta_{0} + \beta_{1} log(\small\text{Salário por hora}) + \beta_{1} log(\text{Salário por hora})^{2} + u$$
+
+# Formas funcionais
+
+```{r,  include = T}
+painel_fec_rep %>%
+  group_by(educ_cat) %>% 
+  summarise(filhos = mean(filhos, na.rm = TRUE), .groups = 'drop') %>% 
+  drop_na() %>% 
+  ggplot() +
+  geom_bar(mapping = aes(x = educ_cat, y = filhos), stat = 'identity', fill='darksalmon' )+
+  theme_minimal()+
+  ylab('Média de Filhos') + xlab('Distribuição de educação') 
+```
+
+
+# Formas funcionais
+
+```{r, include = T}
+painel_fec_rep %>% 
+  mutate(Escolaridade = factor(case_when(educ_cat >= 3 ~ 'Maior ou igual a Ensino Médio', educ_cat < 3 ~ 'Menor que Ensino Médio'))) %>%
+  group_by(renda_cat, Escolaridade) %>% 
+  summarise(filhos = mean(filhos, na.rm = TRUE), .groups = 'drop')%>%
+  drop_na() %>% 
+  ggplot() +
+  geom_bar(mapping = aes(x = renda_cat, y = filhos, fill = Escolaridade), stat = 'identity', position = 'dodge')+
+  ylab('Média de Filhos') + xlab('Distribuição de renda') + 
+  scale_fill_brewer(type = 'qual')+
+  theme_minimal()
+```
+
+
+# Resultados
+\centering
+\begin{table}[]
+\begin{tabular}{lc}
+\multicolumn{2}{c}{\textbf{Impacto da escolaridade na quantidade de filhos}}      \\ \hline
+\multicolumn{1}{c}{}             & \multicolumn{1}{l}{Quantidade de Filhos}       \\ \hline
+Intercepto                       & 2.742*** (0.0762)                              \\
+Fundamental 2 incompleto         & -0.9257*** (0.0848)                            \\
+Ensino médio incompleto         & -1.701*** (0.0795)                             \\
+Ensino médio completo          & -2.048*** (0.1174)                             \\
+Ensino superior                 & -1.959*** (0.0842)                             \\ \hline
+N                                & 6,314                                          \\
+R-quadrado                       & 0.12497                                        \\
+R-quadrado ajustado              & 0.12441                                        \\ \hline
+\multicolumn{2}{l}{Significância: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1} \\ \hline
+\end{tabular}
+\end{table}
+
+# Resultados
+\centering
+\begin{table}[]
+\begin{tabular}{lcc}
+\multicolumn{3}{c}{\textbf{Impacto linear do salário por hora na quantidade de filhos}} \\ \hline
+\multicolumn{1}{c}{}      & \multicolumn{2}{c}{Quantidade de Filhos}                    \\ \cline{2-3} 
+                          & < Ens. Médio      & $\ge$ Ens. Médio      \\ \hline
+Intercepto                & 1.340*** (0.0691)             & 0.4822*** (0.0957)          \\
+Log Salário por hora      & -0.0076 (0.0376)              & 0.1110** (0.0361)           \\ \hline
+N                         & 1,459                         & 4,434                       \\
+R-quadrado                & 0.00646                       & 9.24e-6                     \\
+R-quadrado ajustado       & 0.00578                       & -0.00022                    \\ \hline
+\multicolumn{3}{l}{Significância: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1}       \\ \hline
+\end{tabular}
+\end{table}
+
+# Resultados
+
+\centering
+\begin{table}[]
+\begin{tabular}{lcc}
+\multicolumn{3}{c}{\textbf{Impacto não-linear do salário por hora na quantidade de filhos}} \\ \hline
+\multicolumn{1}{c}{}            & \multicolumn{2}{c}{Quantidade de Filhos}                  \\ \cline{2-3} 
+                                & < Ens. Médio      & $\geq$ Ens. Médio     \\ \hline
+Intercepto                      & 1.692*** (0.1237)            & 0.3804. (0.2097)           \\
+Log Salário por hora            & -0.3613*** (0.1096)          & 0.1857 (0.1418)            \\
+Log(Salário por hora$)^{2}$     & 0.0785*** (0.0228)           & -0.0125 (0.0230)           \\ \hline
+N                               & 4,434                        & 1,459                      \\
+R-quadrado                      & 0.00266                      & 0.00666                    \\
+R-quadrado ajustado             & 0.00221                      & 0.00530                    \\ \hline
+\multicolumn{3}{l}{Significância: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1}           \\ \hline
+\end{tabular}
+\end{table}
+
+# Formas funcionais
+- Observar regressões sobre heterogeinades: 
+
+- Raça (negra, não negra);
+- Grupo de idade (< 20, 20 até 30, > 30);
+- Riqueza (> mediana de salário por hora).
+
+# Testes
+- Diferença entre estimador entre ensino médio completo e superior é significante?
+- Diferença de heterogeneidades é significante?
+
+# Dúvidas
+
+- Como observar o viés na análise de dados?
+- O que se espera da análise de viés?
+
