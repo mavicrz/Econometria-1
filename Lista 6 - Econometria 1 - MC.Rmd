@@ -1,0 +1,176 @@
+---
+title: "Lista 6"
+author: "Maria Vitória Cruz"
+date: "25 de junho de 2022"
+documentclass: article
+papersize: a4
+fontsize: 12pt
+linestretch: 1.5
+geometry: "left = 1.0in, right = 1.0in, top = 1.0in, bottom = 1.0in"
+indent: true
+output:
+  bookdown::pdf_document2:
+    toc: false
+    latex_engine: pdflatex
+    number_sections: true
+    extra_dependencies:
+      fontenc: ["T1"]
+      inputenc: ["utf8"]
+      babel: ["english, latin, brazil"]
+      lipsum: null
+      float: null
+      booktabs: null
+      threeparttable: null
+      array: null
+      graphicx: null
+      tabularx: null
+      adjustbox: null
+      amsmath: null
+      amssymb: null
+      amsthm: null
+header-includes:
+  - \usepackage{floatrow}
+  - \floatsetup[figure]{capposition=top}
+  - \floatsetup[table]{style=plaintop}
+  - \usepackage{hyperref}
+  - \hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue, filecolor=blue}
+---
+
+```{r setup, include=FALSE}
+xfun::pkg_attach(c('dplyr','tidyr','purrr','wooldridge','stargazer'), install = T)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Questão 1
+
+## Questão 1A
+
+Falso, o Teorema do Não-Viés independe da hipótese de homocedesticidade e inexistência de autocorrelação, mas o Teorema de Gauss Markov depende das hipóteses de não-viés, no caso essas não são quebradas. Com heterocedasticidade o Teorema de Gauss Markov não é válido, mas não existe implicação de viés dos estimadores.
+
+## Questão 1B
+
+Falso, os testes sofrem alteração pois a vairância será diferente, logo, deve-se primeiro estimar de forma robusta para realizar o teste com uma nova variância.
+
+# Questão 2
+
+## Questão 2A
+```{r}
+base_ceo <- wooldridge::ceosal1
+
+reg_ceo_1 <- base_ceo %>% 
+  fixest::feols(lsalary ~ finance, vcov = 'hetero')
+
+fixest::etable(reg_ceo_1)
+
+```
+
+Para este caso, temos que o teste T é dado por:
+
+$$t_{1}= \frac{\hat{\beta_{1}} - \beta_{1}}{ep(\hat{\beta_{1}})}$$
+$$t_{1}= \frac{0.1375}{0.0857}$$
+
+$$t_{1}= 1.604434$$
+
+Para uma amostra com 207 graus de liberdade e nível 95% robusto, T = 1,98, logo $|t| < T$ portanto não rejeitamos a hipótese nula. Também é possível ver que o próprio software relata que nesse modelo o estimador $\hat{\beta_{1}}$ não é estatisticamente significante.
+
+```{r}
+reg_ceo_2 <- base_ceo %>% 
+  fixest::feols(lsalary ~ finance + lsales + pcroe, vcov = 'hetero')
+
+fixest::etable(reg_ceo_2)
+```
+
+Para este caso, temos que o teste T é dado por:
+
+$$t_{2}= \frac{\hat{\beta_{1}} - \beta_{1}}{ep(\hat{\beta_{1}})}$$
+$$t_{2}= \frac{0.1021}{0.0786}$$
+
+$$t_{2}= 1.298982$$
+
+Para uma amostra com 207 graus de liberdade e nível 95% robusto, T = 1,98, logo $|t| < T$ portanto não rejeitamos a hipótese nula. Também é possível ver que o próprio software relata que nesse modelo o estimador $\hat{\beta_{1}}$ não é estatisticamente significante.
+
+## Questão 2B
+
+```{r}
+reg_ceo_b1 <- base_ceo %>% 
+  fixest::feols(lsalary ~ lsales, vcov = 'hetero')
+
+reg_ceo_b2 <- base_ceo %>% 
+  fixest::feols(lsalary ~ lsales | indus, vcov = 'hetero')
+
+reg_ceo_b3 <- base_ceo %>% 
+  fixest::feols(lsalary ~ lsales | roe + pcroe, vcov = 'hetero')
+
+reg_ceo_b4 <- base_ceo %>% 
+  fixest::feols(lsalary ~ lsales | roe + pcroe + indus, vcov = 'hetero')
+
+fixest::etable(reg_ceo_b1,reg_ceo_b2,reg_ceo_b3,reg_ceo_b4, fitstat = 'f')
+
+```
+
+## Questão 2C
+Os estimadores para lsales são próximos quando observamos o resultado para o conjunto de indústrias, ao observar somente uma delas, que é a de indústria é possível ver que ela tem diferença para todas as outras empresas de $\hat{\beta}_{1}= 0.2582$ e é estatisticamente significante a elas em 0,1%. Para indústrias quando comparada a todas as outras empresas, possui um impacto de $\hat{\beta}_{1}= 0.2582$ das vendas no salário dos CEO.
+
+Com os efeitos fixos de roe e pcroe o efeito das vendas diminui no salário, porque esses fatores explicam parte do impacto.
+
+## Questão 2D
+
+```{r}
+base_ceo %>% 
+  dplyr::select(lsalary, lsales, roe, pcroe) %>%
+  as.data.frame() %>% 
+  stargazer(type = "text", title = "Análise das variáveis",
+            summary.stat = c("mean", "sd"))
+```
+
+
+# Questão 3
+
+## Questão 3A
+```{r}
+base_ksubs <- wooldridge::k401ksubs %>% 
+  dplyr::filter(fsize == 1) %>% 
+  dplyr::mutate(age_2 = (age -25)^2)
+```
+
+## Questão 3B
+
+```{r}
+reg_ksubs_normal <- base_ksubs %>% 
+  fixest::feols(nettfa ~ inc + age_2 + male + e401k + i(e401k, inc))
+
+reg_ksubs_rob <- base_ksubs %>% 
+  fixest::feols(nettfa ~ inc + age_2 + male + e401k + i(e401k, inc), vcov = 'hetero')
+
+
+fixest::etable(reg_ksubs_normal, reg_ksubs_rob)
+```
+
+A interação de e401k e inc não é estaticamente significante para o modelo sem robustez.
+
+## Questão 3C
+
+```{r}
+reg_ksubs_weight <- lm(formula = nettfa ~ inc + age_2 + male + e401k + e401k:inc, weights = 1/inc, data = base_ksubs)
+
+reg_ksubs_weight %>% summary()
+
+reg_ksubs_gls <- base_ksubs %>% fixest::feglm(nettfa ~ inc + age_2 + male + e401k + e401k:inc)
+
+fixest::etable(reg_ksubs_gls)
+```
+
+O estimador para a interação é estatisticamente sgnificante para 5%. Para MQG, a interação também é estatisticamente significante.
+
+## Questão 3D
+```{r}
+reg_ksubs_gls_2 <- base_ksubs %>%
+  dplyr::mutate(inc_2 = inc -30) %>% 
+  fixest::feglm(nettfa ~ inc + age_2 + male + e401k + e401k:inc_2)
+
+fixest::etable(reg_ksubs_gls_2)
+```
+
+O estimador da interação é igual, mas o estimador de e401k fica estatisticamente significante pois parte do efeito dele devia estar sendo explicado pela variável inc.
+
+

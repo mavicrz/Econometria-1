@@ -1,0 +1,298 @@
+---
+title: "Lista 5"
+author: "Maria Vitória Cruz"
+date: "9 de junho de 2022"
+documentclass: article
+papersize: a4
+fontsize: 12pt
+linestretch: 1.5
+geometry: "left = 1.0in, right = 1.0in, top = 1.0in, bottom = 1.0in"
+indent: true
+output:
+  bookdown::pdf_document2:
+    toc: false
+    latex_engine: pdflatex
+    number_sections: true
+    extra_dependencies:
+      fontenc: ["T1"]
+      inputenc: ["utf8"]
+      babel: ["english, latin, brazil"]
+      lipsum: null
+      float: null
+      booktabs: null
+      threeparttable: null
+      array: null
+      graphicx: null
+      tabularx: null
+      adjustbox: null
+      amsmath: null
+      amssymb: null
+      amsthm: null
+header-includes:
+  - \usepackage{floatrow}
+  - \floatsetup[figure]{capposition=top}
+  - \floatsetup[table]{style=plaintop}
+  - \usepackage{hyperref}
+  - \hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue, filecolor=blue}
+---
+
+```{r setup, include=FALSE}
+xfun::pkg_attach(c('dplyr','tidyr','purrr','wooldridge','stargazer'), install = T)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Questão 1
+
+## Questão 1A
+Falso, esse é o erro tipo II quando a hipótese é verdadeira e concluímos por engano que ela é falsa.
+
+## Questão 1B
+Verdadeiro, pode-se controlar o nível de significância do teste para obter resultados mais acurados.
+
+## Questão 1C
+Verdadeiro, o erro II é quando não se rejeita a hipótese nula sendo que ela é falsa, ou seja, a hipótese alternativa é verdadeira
+
+## Questão 1D
+Verdadeiro.
+
+## Questão 1E
+Verdadeiro.
+
+## Questão 1F
+Falso, na presença de multicolinearidade perfeita não é possível estimar os parâmetros, portanto, testá-los não é possível.
+
+# Questão 2
+
+## Questão 2A
+Como o estimador para o efeito de estar em uma turma pequena na nota do teste é positiva, sim, frequentar uma turma reduzzida melhora nota do teste.
+
+## Questão 2B
+Temos que para o parâmetro de efeito da turma reduzida é de $\hat{\beta}_{1} = 13.9$ e $ep(\hat{\beta}_{1}) = 2.5$, o teste t é dado por:
+
+$$t= \frac{\hat{\beta_{1}} - \beta_{1}}{ep(\hat{\beta_{1}})}$$
+
+$$t= \frac{13.9 - 0}{2.5}$$
+
+$$t= 5.56$$
+
+Portanto, temos para uma amortra grande e com significância de nível 5%, T = 1.96, logo $|t| > T$ portanto é estatisticamente significante.
+
+## Questão 2C
+O intervalo de confiança de 99% é dado por:
+$$IC^{\beta_{1}}_{99\%} = [\hat{\beta_{1}} - t^{99\%}_{n-k-1}ep(\hat{\beta_{1}}); \hat{\beta_{1}} + t^{99\%}_{n-k-1}ep(\hat{\beta_{1}})]$$
+
+$$IC^{\beta_{1}}_{99\%} = [13.9 - 2.576 * 2.5; 13.9 + 2.576 *2.5]$$
+
+$$IC^{\beta_{1}}_{99\%} = [7.46; 20.34]$$
+
+## Questão 2D
+A hipótese de que os erros sejam homocedásticos parece plausível, dado que se houvesse heterocedasticidade a variância seria viesada e os testes seriam inviabilizados.
+
+# Questão 3
+
+## Questão 3A
+O intervalo de confiança com nível de 95% para $\beta_{0}$ é dado por:
+
+$$IC^{\beta_{0}}_{95\%} = [\hat{\beta_{0}} - t^{95\%}_{n-k-1}ep(\hat{\beta_{0}}); \hat{\beta_{0}} + t^{95\%}_{n-k-1}ep(\hat{\beta_{0}})]$$
+$$IC^{\beta_{0}}_{95\%} = [43.2 - t^{95\%}_{30-1-1} * 10.2; 43.2 + t^{95\%}_{30-1-1}* 10.2]$$
+
+$$IC^{\beta_{0}}_{95\%} = [43.2 -2.048 * 10.2; 43.2 + 2.048* 10.2]$$
+
+$$IC^{\beta_{0}}_{95\%} = [22.3104; 64.0896]$$
+Como o zero não está incluso, rejeitamos a hipótese nula.
+
+## Questão 3B
+$$H_{0}: \beta_{1} = 55$$
+
+$$H_{1}: \beta_{1} \neq 55$$
+
+Temos que o teste-t é dado por:
+
+$$t= \frac{\hat{\beta_{1}} - \beta_{1}}{ep(\hat{\beta_{1}})}$$
+$$t= \frac{61.5- 55}{7.4}$$
+
+$$t= 0.8783784$$
+
+Como temos $|t| =0.8783784$, e como temos 28 graus de liberdade e significância de 5%, temos que T = 2.0484, logo $|t| < T$ e a hipótese nula não é rejeitada.
+
+## Questão 3C
+
+$$H_{0}: \beta_{1} = 55$$
+
+$$H_{1}: \beta_{1} > 55$$
+
+Temos que o teste-t é dado por:
+
+$$t= \frac{\hat{\beta_{1}} - \beta_{1}}{ep(\hat{\beta_{1}})}$$
+$$t= \frac{61.5- 55}{7.4}$$
+
+$$t= 0.8783784$$
+
+Como temos $t =0.8783784$, e como temos 28 graus de liberdade e significância de 5%, temos que T = 2.0484, logo $t < T$ e a hipótese nula não é rejeitada.
+
+# Questão 4
+
+## Questão 4A
+Para entender se $hsize^{2}$ é válido na regressão, podemos testar se é significante.
+
+$$t= \frac{\hat{\beta_{2}} - \beta_{2}}{ep(\hat{\beta_{2}})}$$
+$$t= \frac{-2.19}{0.53}$$
+
+$$t= -4.132075$$
+Temos que $|t|= 4.132075$ e que para 4.131 graus de liberdade a nível de 5% o T é de 1.960, portanto sua adição é válida.
+
+## Questão 4B
+Temos que a regressão para mulheres não negras é dada por:
+
+$$E(SAT|female =1, black =0) = 1028.1 + 19.3\bar{hsize} - 2.19\bar{hsize}^{2} - 45.09$$
+$$E(SAT|female =1, black =0) = 983.01 + 19.3\bar{hsize} - 2.19\bar{hsize}^{2}$$
+Para homens não negros, temos:
+$$E(SAT|female =1, black =0) = 1028.1 + 19.3\bar{hsize} - 2.19\bar{hsize}^{2}$$
+
+Portanto, o SAT é diferente mesmo com número de alunos na escola constante. Homens não negros tem melhor nota no SAT do que mulheres não negras.
+
+A diferença é dada por:
+
+$$\hat{\beta_{1}} - (\hat{\beta_{1}} + \hat{\beta_{3}}) = 1028.1 - (1028.1 - 45.09)$$
+$$\hat{\beta_{3}} =45.09$$
+Portanto, testamos se o estimador é estatisticamente significante:
+
+$$t= \frac{\hat{\beta_{3}} - \beta_{3}}{ep(\hat{\beta_{3}})}$$
+
+$$t= \frac{45.09}{4.29}$$
+
+$$t= 10.51049$$
+Para 4131 graus de liberdade e nível de 5%, T = 1.96, logo temos que $|t| > T$ e é estatisticamente significante.
+
+Assim a diferença é estatisticamente significante.
+
+## Questão 4C
+Para homens não negros, temos:
+$$E(SAT|female =0, black =0) = 1028.1 + 19.3\bar{hsize} - 2.19\bar{hsize}^{2}$$
+
+Para homens negros, temos:
+$$E(SAT|female =0, black =1) = 1028.1 + 19.3\bar{hsize} - 2.19\bar{hsize}^{2} - 169.81$$
+$$E(SAT|female =0, black =1) = 858.29 + 19.3\bar{hsize} - 2.19\bar{hsize}^{2}$$
+Portanto devemos testar a diferença de $\hat{\beta}_{4}$.
+
+$$t= \frac{\hat{\beta_{4}} - \beta_{4}}{ep(\hat{\beta_{4}})}$$
+$$t= \frac{169.81}{12.71}$$
+
+$$t= 13.36035$$
+
+Para 4131 graus de liberdade e nível de 5%, temos que $|t|>T$, pois T= 1.96
+
+# Questão 5
+
+## Questão 5A
+Para $\hat{\beta}_{0}$, temos:
+
+$$t_{0}= \frac{\hat{\beta_{0}}}{ep(\hat{\beta_{0}})}$$
+
+
+$$t_{0}= \frac{4.75}{0.07}$$
+
+$$t_{0}= 67.85714$$
+
+Para 2704 graus de liberdade, com nível de significância de 5%, temos que T = 1.96, portanto é significante pois $|t_{0}| > T$.
+
+Para $\hat{\beta}_{1}$, temos:
+
+$$t_{1}= \frac{\hat{\beta_{1}}}{ep(\hat{\beta_{1}})}$$
+$$t_{1}= \frac{-0.55}{0.08}$$
+$$t_{1}= - 6.875$$
+Para 2704 graus de liberdade, com nível de significância de 5%, temos que T = 1.96, portanto é significante pois $|t_{1}| > T$.
+
+
+Para $\hat{\beta}_{2}$, temos:
+
+$$t_{2}= \frac{\hat{\beta_{2}}}{ep(\hat{\beta_{2}})}$$
+$$t_{2}= \frac{0.027}{0.006}$$
+
+$$t_{2}=4.5$$
+Para 2704 graus de liberdade, com nível de significância de 5%, temos que T = 1.96, portanto é significante pois $|t_{2}| > T$.
+
+Para $\hat{\beta}_{3}$, temos:
+
+$$t_{3}= \frac{\hat{\beta_{3}}}{ep(\hat{\beta_{3}})}$$
+$$t_{3}= \frac{0.08}{0.007}$$
+
+$$t_{3}= 11.42857$$
+
+Para 2704 graus de liberdade, com nível de significância de 5%, temos que T = 1.96, portanto é significante pois $|t_{3}| > T$.
+
+Para $\hat{\beta}_{4}$, temos:
+
+$$t_{4}= \frac{\hat{\beta_{4}}}{ep(\hat{\beta_{4}})}$$
+
+$$t_{4}= \frac{-0.002}{0.0003}$$
+
+$$t_{4}= 6.666667$$
+
+Para 2704 graus de liberdade, com nível de significância de 5%, temos que T = 1.96, portanto é significante pois $|t_{4}| > T$.
+
+Para avaliar de forma conjunta, a hipótese nula é de que o modelo tenha todos seus parâmetros iguais a zero, logo o modelo restrito é dado por:
+
+$$y = \beta_{0} + u$$
+Portanto o R-quadrado é zero dado que não há variação da variável explicativa.
+
+Para o modelo irrestrito, temos que o R-quadrado é do modelo original, $R^{2} = 0.24$.
+
+Assim, o teste F é dado por:
+
+$$F = \frac{R^{2}_{IR} - R^{2}_{R}}{k} * \frac{n - k - 1}{1 - R^{2}_{IR}}$$
+$$F = \frac{0.24}{4} * \frac{2709 - 4 - 1}{1 - 0.24}$$
+$$F = \frac{0.24}{4} * \frac{2704}{0.76}$$
+
+$$F = 213.4737$$
+
+Para F(4,2704) temos que p(F > 213.4737)=2.357712e-159 e $p(F = 3.7) \approx 0.005$, portanto a hipótese nula é rejeitada. 
+
+## Questão 5B
+Como o parâmetro $\beta_{1}$ indica o impacto de ser uma mulher no salário, observaria se este estimador resultado da regressão é estaticamente significante.
+
+## Questão 5C
+Para mulheres menos educadas, e que portanto possuem $educ = 0$, temos:
+
+$$E[log(salario) | educ=0, gen = 1] = 4.75 - 0.55 + 0.08exper - 0.002exper^{2}$$
+
+$$E[log(salario) | educ=0, gen = 1] = 4.2 + 0.08exper - 0.002exper^{2}$$
+
+
+Para mulheres educadas temos:
+
+$$E[log(salario) | educ=1, gen = 1] = 4.75 - 0.55 + 0.027+ 0.08exper - 0.002exper^{2}$$
+
+$$E[log(salario) | educ=1, gen = 1] = 4.227 + 0.08exper - 0.002exper^{2}$$
+
+Portanto, para mulheres, quando mais educadas, o seu salário é maior mesmo sem nenhuma experiência, a reta de salário quando educada fica acima da reta de mulheres não educadas.
+
+Para homens não educados, temos:
+$$E[log(salario) | educ=0, gen = 0] = 4.75 + 0.08exper - 0.002exper^{2}$$
+
+Para homens educados, temos:
+$$E[log(salario) | educ=1, gen = 0] = 4.75 + 0.08exper - 0.002exper^{2}$$
+Para homens não educados e educados a reta é a mesma, afinal não existe a variável educ sem interação, assim, não vemos diferença de educação entre os homens.
+
+Para pessoas que sofrem discriminação de gênero, ou seja mulheres, lidam com maior discriminação no mercado de trabalho quanto a educação.
+
+# Questão 6
+Temos o modelo:
+$$y_{i} = \beta_{0} + \beta_{1}x_{1i} + \beta_{2}x_{2i} + u_{i}$$
+E o teste dado por $R\beta = b$
+
+## Questão 6A
+Para $\beta_{0} = \beta_{1}$ temos que $\beta= \beta_{0}$, $b= \beta_{1}$ e $R = 1$, portanto $b= \beta$.
+
+Portanto temos $H_{0}: \beta_{0} = b,  \beta_{1} = b$ e $H_{1}: \beta_{i} \neq b, \forall i \in (0,1)$
+
+## Questão 6B
+Para $\beta_{1} + a \beta_{2} = 0$, temos $a \beta_{2} = -\beta_{1}$, assim, $R = a$ e $-\beta_{1} = b$, logo  $\beta_{1} = -b$.
+
+Assim temos $H_{0}: \beta_{1} = -b, beta{2} = \frac{b}{a}$ e $H_{1}: \beta_{1} \neq -b \lor beta{2} \neq \frac{b}{a}$
+
+## Questão 6C
+Para $\beta_{1} + \beta_{2} = 1$, temos que $\beta_{1} = 1-\beta_{2}$, sendo $R = 1$, $\beta_{1} = \beta = b$ e $b = 1-\beta_{2}$ sendo  $\beta_{2} = 1-b$.
+
+Assim temos $H_{0}: \beta_{1} = b, \beta_{2} = 1-b$ e $H_{1}: \beta_{1} \neq b, \beta_{2} \neq 1-b$
+
